@@ -1,0 +1,14 @@
+-creation d'un tournois
+-chaque tournois contient 8 joueurs
+-creation d'une fonction pour créer des paires
+-mettre en place le systeme suisse
+	-créer 2 groupes, premier groupe avec le + haut classement, deuxieme avec le classement le plus bas
+	-faire affronter le 1er avec le 1er, 2eme avec 2eme etc
+-faire un premier tour 
+-pour chaque matchs créer un tuple avec 2 infos ([joueur, score], [joueur2, score])
+-chaque tour s'appellera round 1, round 2 etc
+-chaque round devra contenir un champ date et heure de début et date et heure de fin 
+	heure du début créé automatiquement lorsqu'un tour est créé, et date de fin quand l'utilisateur le marque comme finis
+
+-Au prochain tour triez les gens en fonctions de leur points, puis faites jouer le 1 avec le 2 et ainsi de suite, si le 
+1 a deja jouer avec le 2, faites le jouer avec le 3
