@@ -12,7 +12,7 @@ class Joueur:
         self.classement = classement
 
 class Tournois:
-    def __init__(self, nom, lieu, date, nombre_de_tours, tournees, liste_des_joueurs, description):
+    def __init__(self, nom, lieu, date, nombre_de_tours, tournees, liste_des_joueurs,controle_du_temps, description):
         self.nom = nom
         self.lieu = lieu
         self.date = date
@@ -21,6 +21,7 @@ class Tournois:
         self.tournees = tournees
         self.liste_des_joueurs = liste_des_joueurs
         Liste_des_joueurs = []
+        self.controle_du_temps = controle_du_temps
         self.description = description
 
 class Matchs:
@@ -39,6 +40,16 @@ def liste_des_tournois():
         liste_tournois.append(tournois['nom'])
     return liste_tournois
 
+def liste_joueurs():
+    db = TinyDB('db.json')
+    players_table = db.table('Joueurs')
+    liste_joueurs = []
+    for player in players_table.all():
+        nom = player['nom']
+        prenom = player['prenom']
+        nom_prenom = nom + " " + prenom
+        liste_joueurs.append(nom_prenom)
+    return liste_joueurs
 
 marvin = Joueur("de cocq", "marvin", "20/07/98", "masculin", 1)
 marvin2 = Joueur("chebany", "rocket", "20/07/98", "masculin", 3)
@@ -52,23 +63,13 @@ papy = Joueur("chebany", "cheban", "12/04/44", "masculin", 68)
 
 
 liste_joueur = [marvin, marvin2, marvin3, loan, papa, maman, mamie, papy]
-tournois = Tournois('rocket league', 'val-de-marne', "28/08/21","4","none", liste_joueur, "Beau tournois")
+tournois = Tournois('rocket league', 'val-de-marne', "28/08/21","4","none", liste_joueur, "blitz", "Beau tournois")
 db = TinyDB('db.json')
 players_table = db.table('joueurs')
 tournois_table = db.table('tournois')
 players_table.truncate()	# clear the table first
+db.truncate()
 
-for player in liste_joueur:
-    serialized_player = {
-        'nom': player.nom,
-        'prenom': player.prenom,
-        'date de naissance': player.date_de_naissance,
-        'sexe': player.sexe,
-        'classement': player.classement
-
-    }
-    players_table.insert(serialized_player)
-serialized_player = players_table.all()
 
 
 liste_joueur = []

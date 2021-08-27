@@ -3,16 +3,20 @@ Ce fichier va contenir toutes les fonctions du projet
 """
 import random
 from tinydb import TinyDB, where, Query
-from modele import db, players_table, liste_joueur, Matchs, Tournois, liste_des_tournois
-from verification import champ_vide, date_verification, test_choix_du_tournois
+from modele import db, players_table, Matchs, Tournois, liste_des_tournois, Joueur, liste_joueurs
+from verification import champ_vide, date_verification, test_choix_du_tournois, verification_controle_du_temps,\
+    verification_tournois_already_exists, sexe_verification, classement_verification
 
 def creation_tournois():
     #nom lieu date joueurs
     print("Vous allez créer un tournois :")
     nom = input("Choisissez un nom pour le tournois : ")
     champ_vide(nom)
+    verification_tournois_already_exists(nom)
+
     lieu = input("Choisissez le lieu du tournois : ")
     champ_vide(lieu)
+
     j = input("Entrez le jour du tournois (ex : 11) : ")
     champ_vide(j)
     j = int(j)
@@ -28,8 +32,15 @@ def creation_tournois():
     date = str(j) + "/" + str(m) + "/" + str(a)
 
     date_verification(j,m,a)
+
+    controle_du_temps = input("Contrôle du temps (bullet, blitz ou coup rapide) : ")
+    champ_vide(controle_du_temps)
+    controle_du_temps = verification_controle_du_temps(controle_du_temps)
+
+    description = input("Si vous voulez ajouter une description au tournois : ")
+
     tournois = Tournois(nom=nom, lieu=lieu, date=date, nombre_de_tours=4, tournees=None, liste_des_joueurs=None,
-                        description="")
+                        controle_du_temps=controle_du_temps, description=description)
     try:
         db = TinyDB('db.json')
         tournois_table = db.table('Tournois')
@@ -40,9 +51,10 @@ def creation_tournois():
             'nombre de tours':tournois.nombre_de_tours,
             'tournees':tournois.tournees,
             'liste des joueurs':tournois.liste_des_joueurs,
+            'contrôle du temps':tournois.controle_du_temps,
             'description':tournois.description
         }
-        tournois_table.insert(serialized_tournois)
+        tournois_table.insert(serialized_table)
         tournois_table = tournois_table.all()
     except:
         print("Le tournois n'a pas été enregistré dans la base de donnée")
@@ -64,11 +76,48 @@ def creation_liste_joueur():
     i = 0
     while i < 8:
         i += 1
+
         nom = input("Nom de famille : ")
+        champ_vide(nom)
+
         prenom = input("Prénom : ")
+        champ_vide(prenom)
+
         date_de_naissance = input("Date de naissance (jj/mm/aa) : ")
+        champ_vide(date_de_naissance)
+
         sexe = input("sexe (m/f) : ")
+        champ_vide(sexe)
+        sexe_verification(sexe)
+
         classement = input("Classement : ")
+        champ_vide(classement)
+        classement = classement_verification(classement)
+
+        joueur = Joueur(nom, prenom, date_de_naissance, sexe, classement)
+
+        #on enregistre le joueur ici
+        try:
+            db = TinyDB('db.json')
+            players_table = db.table('Joueurs')
+
+            serialized_player = {
+                'nom':joueur.nom,
+                'prenom':joueur.prenom,
+                'date de naissance':joueur.date_de_naissance,
+                'sexe':joueur.sexe,
+                'classement':joueur.classement
+            }
+            players_table.insert(serialized_player)
+
+            print("""
+                Le joueur {} {} a bien été enregistré dans la base de données.        
+            """.format(joueur.nom, joueur.prenom))
+        except:
+            print("Le joueur n'a pas été enregistré dans la base de données.")
+
+    liste_des_joueurs = liste_joueurs()
+    print(liste_des_joueurs)
 
 
 def creation_paires(liste_joueur):
@@ -154,16 +203,6 @@ def matchs(paires):
     matchs_table = matchs_table.all()
     print(matchs_table)
 
-
-
-
-
-    #pour chaque paires
-
-
-paires = creation_paires(liste_joueur)
-print(paires)
-matchs(paires)
 
 
 
