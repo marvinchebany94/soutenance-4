@@ -3,7 +3,74 @@ Ce fichier va contenir toutes les fonctions du projet
 """
 import random
 from tinydb import TinyDB, where, Query
-from modele import db, players_table, liste_joueur, Matchs
+from modele import db, players_table, liste_joueur, Matchs, Tournois, liste_des_tournois
+from verification import champ_vide, date_verification, test_choix_du_tournois
+
+def creation_tournois():
+    #nom lieu date joueurs
+    print("Vous allez créer un tournois :")
+    nom = input("Choisissez un nom pour le tournois : ")
+    champ_vide(nom)
+    lieu = input("Choisissez le lieu du tournois : ")
+    champ_vide(lieu)
+    j = input("Entrez le jour du tournois (ex : 11) : ")
+    champ_vide(j)
+    j = int(j)
+
+    m = input("Entrez le mois du tournois (ex : 6) : ")
+    champ_vide(m)
+    m = int(m)
+
+    a = input("Entrez l'année du tournois (ex : 2021) : ")
+    champ_vide(a)
+    a = int(a)
+
+    date = str(j) + "/" + str(m) + "/" + str(a)
+
+    date_verification(j,m,a)
+    tournois = Tournois(nom=nom, lieu=lieu, date=date, nombre_de_tours=4, tournees=None, liste_des_joueurs=None,
+                        description="")
+    try:
+        db = TinyDB('db.json')
+        tournois_table = db.table('Tournois')
+        serialized_tournois = {
+            'nom':tournois.nom,
+            'lieu':tournois.lieu,
+            'date':tournois.date,
+            'nombre de tours':tournois.nombre_de_tours,
+            'tournees':tournois.tournees,
+            'liste des joueurs':tournois.liste_des_joueurs,
+            'description':tournois.description
+        }
+        tournois_table.insert(serialized_tournois)
+        tournois_table = tournois_table.all()
+    except:
+        print("Le tournois n'a pas été enregistré dans la base de donnée")
+    print(tournois_table)
+
+    print("Le tournois a bien été créé et enregistré.")
+
+def creation_liste_joueur():
+    liste_tournois = liste_des_tournois()
+
+    print("""
+        Vous allez créer une liste de joueurs pour un tournois.
+        Veuillez selectionner un tournois dans la liste suivante :
+        {}
+    """.format(liste_tournois))
+
+    choix_du_tournois = input("choisissez le tournois auquel vous voulez ajouter des personnes : ")
+    test_choix_du_tournois(choix_du_tournois)
+    i = 0
+    while i < 8:
+        i += 1
+        nom = input("Nom de famille : ")
+        prenom = input("Prénom : ")
+        date_de_naissance = input("Date de naissance (jj/mm/aa) : ")
+        sexe = input("sexe (m/f) : ")
+        classement = input("Classement : ")
+
+
 def creation_paires(liste_joueur):
     """
     la fonction va créer 2 listes, les 4 meilleurs joueurs et les 4 moins bons.

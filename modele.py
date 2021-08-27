@@ -29,6 +29,17 @@ class Matchs:
         self.tuple = tuple
 
 
+def liste_des_tournois():
+
+    db = TinyDB('db.json')
+    Tournois_table = db.table('Tournois')
+    Tournois_table = Tournois_table.all()
+    liste_tournois = []
+    for tournois in Tournois_table:
+        liste_tournois.append(tournois['nom'])
+    return liste_tournois
+
+
 marvin = Joueur("de cocq", "marvin", "20/07/98", "masculin", 1)
 marvin2 = Joueur("chebany", "rocket", "20/07/98", "masculin", 3)
 marvin3 = Joueur("dunoyer", "kahyss", "16/03/2019", "masculin", 10)
@@ -58,7 +69,7 @@ for player in liste_joueur:
     }
     players_table.insert(serialized_player)
 serialized_player = players_table.all()
-print(serialized_player)
+
 
 liste_joueur = []
 for item in players_table:
