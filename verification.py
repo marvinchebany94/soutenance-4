@@ -3,10 +3,11 @@ from modele import liste_des_tournois
 
 def champ_vide(champ_a_tester):
     if len(champ_a_tester) == 0:
-        print("Le champ {} est mal rempli.".format(champ_a_tester))
+        print("Le champ est mal rempli.")
         sys.exit()
     else:
-        pass
+        return champ_a_tester
+
 
 def date_verification(j, m, a):
     if type(j) != int or type(m) != int or type(a) != int:
@@ -14,9 +15,10 @@ def date_verification(j, m, a):
     else:
         try:
             date = datetime.datetime(a,m,j)
+            return True
         except ValueError:
             print("La date n'est pas valide.")
-            sys.exit()
+            return False
 
 def verification_tournois_already_exists(nom_du_tournois):
     liste_tournois = liste_des_tournois()
@@ -55,12 +57,20 @@ def sexe_verification(reponse):
     if reponse == "m":
         return reponse
     else:
-        print("Tu n'as pas entré la bonne information. (f ou m)")
-        sys.exit()
+        while reponse != "f" or reponse != "m":
+            print("Tu n'as pas entré la bonne information. (f ou m)")
+            reponse = input(": ")
+            sexe = sexe_verification(reponse)
+            return sexe
+            break
+
 
 def classement_verification(classement):
-    if int(classement) < 0:
+    while int(classement) <= 0:
         print("Tu en peux pas être classé en-dessous de 0.")
-        sys.exit()
-    else:
-        return classement
+        classement = input(": ")
+        classement_verification(classement)
+        break
+    return classement
+
+

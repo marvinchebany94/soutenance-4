@@ -51,6 +51,12 @@ def liste_joueurs():
         liste_joueurs.append(nom_prenom)
     return liste_joueurs
 
+def players_table():
+    db = TinyDB('db.json')
+    players_table = db.table('Joueurs')
+
+    return players_table
+
 marvin = Joueur("de cocq", "marvin", "20/07/98", "masculin", 1)
 marvin2 = Joueur("chebany", "rocket", "20/07/98", "masculin", 3)
 marvin3 = Joueur("dunoyer", "kahyss", "16/03/2019", "masculin", 10)
@@ -59,6 +65,7 @@ papa = Joueur("de cocq", "martial", "13/10/71", "masculin", 41)
 maman = Joueur("chebany", "angela", "16/03/2019", "féminin", 2)
 mamie = Joueur("chebany", "henriette", "09/06/50", "féminin", 34)
 papy = Joueur("chebany", "cheban", "12/04/44", "masculin", 68)
+
 
 
 

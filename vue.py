@@ -1,4 +1,5 @@
-from fonctions import creation_tournois, creation_liste_joueur
+import sys
+from fonctions import creation_tournois, creation_liste_joueur, add_players_to_tournament, creation_paires
 
 def main():
     while True:
@@ -6,8 +7,15 @@ def main():
                                              "(creer / choisir / q pour quitter) : ")
         if creer_ou_choisir_un_tournois == "creer":
             creation_tournois()
+            tournois = creation_liste_joueur()
+            add_players_to_tournament(tournois)
+            paires = creation_paires()
+            print(paires)
         if creer_ou_choisir_un_tournois == "choisir":
-            creation_liste_joueur()
+            tournois = creation_liste_joueur()
+            add_players_to_tournament(tournois)
+            paires = creation_paires()
+            print(paires)
         if creer_ou_choisir_un_tournois == "q":
             print("Vous allez quitter le script.")
             sys.exit()
