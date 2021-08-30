@@ -229,7 +229,6 @@ def changer_classement_joueurs():
 
     db = TinyDB('db.json')
     players_table = db.table("Joueurs")
-    Joueurs = Query()
     liste_des_joueurs = liste_joueurs()
     print("""
         Voici la liste des joueurs dans la base de données :
@@ -238,20 +237,22 @@ def changer_classement_joueurs():
     nom_prenom = input("Choissisez la personne à qui vous voulez modifier le classement : ")
     nom_prenom = nom_prenom.split(" ")
     print(nom_prenom[0])
-    print(type(players_table))
-    players_table = players_table.search(where('prenom') == nom_prenom[1])[0]
 
-    #l = j.search(j['prenom'] == nom_prenom[1])
-    print(players_table)
+    players_table = players_table.search(where('nom') == nom_prenom[0])
+    for player in players_table:
 
-
+        if nom_prenom[1] in str(player):
+            player_founded = player
+            print(player_founded)
+        else:
+            continue
 
     nouveau_classement = input("Entrez son nouveau classement : ")
     champ_vide(nouveau_classement)
     nouveau_classement = classement_verification(nouveau_classement)
 
-    players_table.update({'classement':nouveau_classement})
-    print(players_table)
+    player_founded.update({'classement':nouveau_classement})
+    print(player_founded)
 
 
 
