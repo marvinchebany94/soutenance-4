@@ -66,6 +66,12 @@ def sexe_verification(reponse):
 
 
 def classement_verification(classement):
+    try:
+        int(classement)
+    except ValueError:
+        print("La valeur n'est pas correcte.")
+
+        sys.exit()
     while int(classement) <= 0:
         print("Tu en peux pas être classé en-dessous de 0.")
         classement = input(": ")

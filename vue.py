@@ -1,7 +1,11 @@
 import sys
-from fonctions import creation_tournois, creation_liste_joueur, add_players_to_tournament, creation_paires
+from fonctions import creation_tournois, creation_liste_joueur, add_players_to_tournament, creation_paires, matchs,\
+    changer_classement_joueurs
+from modele import creation_joueurs
 
 def main():
+    creation_joueurs()
+    changer_classement_joueurs()
     while True:
         creer_ou_choisir_un_tournois = input("Voulez vous créer ou choisir un tournois déjà créé ? "
                                              "(creer / choisir / q pour quitter) : ")
@@ -16,6 +20,8 @@ def main():
             add_players_to_tournament(tournois)
             paires = creation_paires()
             print(paires)
+            matchs(paires)
+
         if creer_ou_choisir_un_tournois == "q":
             print("Vous allez quitter le script.")
             sys.exit()

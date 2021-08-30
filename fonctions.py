@@ -3,7 +3,7 @@ Ce fichier va contenir toutes les fonctions du projet
 """
 import random
 from tinydb import TinyDB, where, Query
-from modele import db, Matchs, Tournois, liste_des_tournois, Joueur, liste_joueurs, players_table
+from modele import Matchs, Tournois, liste_des_tournois, Joueur, liste_joueurs
 from verification import champ_vide, date_verification, test_choix_du_tournois, verification_controle_du_temps,\
     verification_tournois_already_exists, sexe_verification, classement_verification
 
@@ -196,38 +196,62 @@ def creation_paires():
 #2 listes avec instance de joueur + le score
 def matchs(paires):
     #id du match
-    id = 0
-    liste_id_et_tuples = []
-    for pair in paires:
-        id += 1
+
+    liste_matchs = []
+    for paire in paires:
         score_1 = random.randint(0, 1)
         score_2 = random.randint(0, 1)
         while score_2 == score_1:
             score_2 = random.randint(0, 1)
-        tuple = ([pair[0], score_1], [pair[1], score_2])
-        match = Matchs(id, tuple)
+        match = ([paire[0], score_1], [paire[1], score_2])
+        match = Matchs(match, 'rocket league')
 
-        liste_id_et_tuples.append([match.id, match.tuple])
-        #liste_tuple.append(match.tuple)
+        liste_matchs.append(match)
 
-    for id_tuple in liste_id_et_tuples:
-        id = id_tuple[0]
-        tuple = id_tuple[1]
-        match = Matchs(id, tuple)
-        try:
-            db = TinyDB('db.json')
-            matchs_table = db.table('matches')
-            match_serialized = {
-                'id':match.id,
-                'tuple':match.tuple
-            }
-            matchs_table.insert(match_serialized)
+    db = TinyDB('db.json')
+    matchs_table = db.table('Matchs')
+    matchs_table.truncate()
+    for m in liste_matchs:
+        match = Matchs(m, tournois='rocket league')
 
-        except:
-            print("une erreur a été dectecté lors de la création de la bdd")
+        match_serialized = {
+            'paire':match.paire,
+            'tournois':match.tournois
+        }
+        matchs_table.insert(match_serialized)
+
+        #except:
+            #print("une erreur a été dectecté lors de la création de la bdd")
     matchs_table = matchs_table.all()
     print(matchs_table)
 
+def changer_classement_joueurs():
+
+    db = TinyDB('db.json')
+    players_table = db.table("Joueurs")
+    Joueurs = Query()
+    liste_des_joueurs = liste_joueurs()
+    print("""
+        Voici la liste des joueurs dans la base de données :
+        {}
+    """.format(liste_des_joueurs))
+    nom_prenom = input("Choissisez la personne à qui vous voulez modifier le classement : ")
+    nom_prenom = nom_prenom.split(" ")
+    print(nom_prenom[0])
+    print(type(players_table))
+    players_table = players_table.search(where('prenom') == nom_prenom[1])[0]
+
+    #l = j.search(j['prenom'] == nom_prenom[1])
+    print(players_table)
+
+
+
+    nouveau_classement = input("Entrez son nouveau classement : ")
+    champ_vide(nouveau_classement)
+    nouveau_classement = classement_verification(nouveau_classement)
+
+    players_table.update({'classement':nouveau_classement})
+    print(players_table)
 
 
 
