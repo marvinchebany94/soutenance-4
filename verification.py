@@ -22,7 +22,7 @@ def date_verification(j, m, a):
 
 def verification_tournois_already_exists(nom_du_tournois):
     liste_tournois = liste_des_tournois()
-    if nom_du_tournois in liste_tournois:
+    if nom_du_tournois in liste_tournois: #chercher une fonction pour chercher plus rapidement
         print("""
             Le tournois que vous voulez créer existe déjà dans la base de donnée.
              Veuillez trouver un autre nom pour celui-ci.       
@@ -66,6 +66,12 @@ def sexe_verification(reponse):
 
 
 def classement_verification(classement):
+    try:
+        int(classement)
+    except ValueError:
+        print("La valeur n'est pas correcte.")
+
+        sys.exit()
     while int(classement) <= 0:
         print("Tu en peux pas être classé en-dessous de 0.")
         classement = input(": ")
