@@ -304,10 +304,13 @@ def matchs(paires):
 
     liste_matchs = []
     for paire in paires:
-        score_1 = random.randint(0, 1)
-        score_2 = random.randint(0, 1)
-        while score_2 == score_1:
-            score_2 = random.randint(0, 1)
+        score_1 = random.choice([0,0.5,1])
+        if score_1 == 0:
+            score_2 = 1
+        if score_1 == 1:
+            score_2 = 0
+        if score_1 == 0.5:
+            score_2 = 0.5
         tuple = [paire[0], score_1], [paire[1], score_2] #ajout d'un id unique
 
         liste_matchs.append(tuple)
@@ -324,7 +327,7 @@ def matchs(paires):
         }
         matchs_table.insert(match_serialized)
 
-    #matchs_table = matchs_table.all()
+
     print(matchs_table.all())
     return liste_matchs
 
