@@ -217,6 +217,9 @@ def creation_paires_tour_1():
 
     liste_croissante_joueur_1_point = []
     liste_finale_joueur_1_point = []
+    liste_croissante_joueur_0_point = []
+    liste_finale_joueur_0_point = []
+    liste_finale = []
 
     for match in matchs_table:
         joueur_1 = match['paire'][0]
@@ -236,6 +239,7 @@ def creation_paires_tour_1():
     print("liste des joueurs à 0 point : {}".format(liste_joueurs_0_point))
 
     #on va chercher le classement des joueurs pour chaque groupe afin de les trier selon ça
+    #groupe pour les joueurs à 1 point:
     for joueur in liste_joueurs_1_point:
         nom_prenom = joueur[0]
         nom = nom_prenom.split()[1]
@@ -259,6 +263,38 @@ def creation_paires_tour_1():
         liste_finale_joueur_1_point.append(nom_prenom)
 
     print(liste_finale_joueur_1_point)
+
+
+    #groupe pour les joueurs à 0 point :
+
+    for joueur in liste_joueurs_0_point:
+        nom_prenom = joueur[0]
+        nom = nom_prenom.split()[1]
+        prenom = nom_prenom.split()[0]
+
+        recherche_classement = players_table.search(where('nom') == nom)
+
+        for resultat in recherche_classement:
+            if resultat['prenom'] == prenom:
+                classement = int(resultat['classement'])
+                liste_croissante_joueur_0_point.append(classement)
+            else:
+                pass
+
+    liste_croissante_joueur_0_point = sorted(liste_croissante_joueur_0_point)
+    print(liste_croissante_joueur_0_point)
+
+    for classement in liste_croissante_joueur_0_point:
+        recherche_prenom_nom = players_table.search(where('classement') == classement)[0]
+        nom_prenom = recherche_prenom_nom['nom'] + " " + recherche_prenom_nom['prenom']
+        liste_finale_joueur_0_point.append(nom_prenom)
+
+    print(liste_finale_joueur_0_point)
+    liste_finale = liste_finale_joueur_1_point + liste_finale_joueur_0_point
+    print(liste_finale)
+
+
+
 
 
 
