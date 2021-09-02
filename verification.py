@@ -22,7 +22,7 @@ def date_verification(j, m, a):
 
 def verification_tournois_already_exists(nom_du_tournois):
     liste_tournois = liste_des_tournois()
-    if nom_du_tournois in liste_tournois:
+    if nom_du_tournois in liste_tournois: #chercher une fonction pour chercher plus rapidement
         print("""
             Le tournois que vous voulez créer existe déjà dans la base de donnée.
              Veuillez trouver un autre nom pour celui-ci.       

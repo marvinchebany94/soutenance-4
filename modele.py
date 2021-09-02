@@ -1,19 +1,23 @@
 from tinydb import TinyDB
+from datetime import datetime
 """
 Dans ce fichier on va créer toutes les classes pour le script
 """
 
 class Joueur:
-    def __init__(self, nom, prenom, date_de_naissance, sexe, classement, tournois):
+    def __init__(self, nom, prenom, date_de_naissance, sexe, classement, tournois, points):
         self.nom = nom
         self.prenom = prenom
         self.date_de_naissance = date_de_naissance
         self.sexe = sexe
         self.classement = classement
         self.tournois = tournois
+        self.points = points
+        points = 0
 
 class Tournois:
-    def __init__(self, nom, lieu, date, nombre_de_tours, tournees, liste_des_joueurs,controle_du_temps, description):
+    def __init__(self, nom, lieu, date, nombre_de_tours, tournees, liste_des_joueurs, controle_du_temps, description,
+                 date_de_creation):
         self.nom = nom
         self.lieu = lieu
         self.date = date
@@ -24,6 +28,8 @@ class Tournois:
         Liste_des_joueurs = []
         self.controle_du_temps = controle_du_temps
         self.description = description
+        self.date_de_creation = date_de_creation
+
 
 class Tours:
     def __init__(self, nom, debut, fin, match, tournois):
@@ -32,15 +38,13 @@ class Tours:
         self.fin = fin
         self.match = match
         match = ()
-        self.tournois
+        self.tournois = tournois
 
 class Matchs:
-    def __init__(self,paire, tournois):
+    def __init__(self, paire, tournois):
         self.paire = paire
         paire = ()
         self.tournois = tournois
-
-
 
 
 def liste_des_tournois():
@@ -64,22 +68,17 @@ def liste_joueurs():
         liste_joueurs.append(nom_prenom)
     return liste_joueurs
 
-def players_table():
-    db = TinyDB('db.json')
-    players_table = db.table('Joueurs')
-
-    return players_table
 
 def creation_joueurs():
 
-    marvin = Joueur("de cocq", "marvin", "20/07/98", "m", 1, None)
-    marvin2 = Joueur("chebany", "rocket", "20/07/98", "m", 3, None)
-    marvin3 = Joueur("dunoyer", "kahyss", "16/03/2019", "m", 10, None)
-    loan = Joueur("dunoyer", "loan", "01/11/00", "f", 100, None)
-    papa = Joueur("de cocq", "martial", "13/10/71", "m", 41, None)
-    maman = Joueur("chebany", "angela", "16/03/2019", "f", 2, None)
-    mamie = Joueur("chebany", "henriette", "09/06/50", "f", 34, None)
-    papy = Joueur("chebany", "cheban", "12/04/44", "m", 68, None)
+    marvin = Joueur("decocq", "marvin", "20/07/98", "m", 1, None, 0)
+    marvin2 = Joueur("chebany", "rocket", "20/07/98", "m", 3, None, 0)
+    marvin3 = Joueur("dunoyer", "kahyss", "16/03/2019", "m", 10, None, 0)
+    loan = Joueur("dunoyer", "loan", "01/11/00", "f", 100, None, 0)
+    papa = Joueur("decocq", "martial", "13/10/71", "m", 41, None, 0)
+    maman = Joueur("chebany", "angela", "16/03/2019", "f", 2, None, 0)
+    mamie = Joueur("chebany", "henriette", "09/06/50", "f", 34, None, 0)
+    papy = Joueur("chebany", "cheban", "12/04/44", "m", 68, None, 0)
     liste_des_joueurs = [marvin, marvin2, marvin3, loan, papa, maman, mamie, papy]
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')
@@ -91,7 +90,8 @@ def creation_joueurs():
             'date de naissance':player.date_de_naissance,
             'sexe':player.sexe,
             'classement':player.classement,
-            'tournois':player.tournois
+            'tournois':player.tournois,
+            'points':player.points
         }
         players_table.insert(serialized_player)
 
