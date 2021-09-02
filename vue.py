@@ -6,7 +6,7 @@ from modele import creation_joueurs
 def main():
 
     while True:
-        commandes = input("(creer | choisir | modifier classement | q pour quitter) : ")
+        commandes = input("(creer | choisir | modifier classement | creer bdd | test | q pour quitter) : ")
         if commandes == "creer":
             creation_tournois()
             tournois = creation_liste_joueur()
@@ -21,19 +21,21 @@ def main():
             matchs(paires)
 
         if commandes == "modifier classement":
-            creation_joueurs()
+            #creation_joueurs()
             changer_classement_joueurs()
 
         if commandes == "q":
             print("Vous allez quitter le script.")
             sys.exit()
 
-        if commandes == "test":
+        if commandes == "creer bdd":
             creation_joueurs()
+
+        if commandes == "test":
             paires = creation_paires()
             liste_matchs = matchs(paires)
             creation_tour('rocket league', liste_matchs)
-            creation_paires_tour_1()
+            #creation_paires_tour_1()
 
         else:
             print("Ta réponse ne figure pas dans la liste des choix.")
