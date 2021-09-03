@@ -1,4 +1,5 @@
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
+
 from datetime import datetime
 """
 Dans ce fichier on va créer toutes les classes pour le script
@@ -67,6 +68,14 @@ def liste_joueurs():
         nom_prenom = nom + " " + prenom
         liste_joueurs.append(nom_prenom)
     return liste_joueurs
+
+def liste_acteurs_odre_alphabetique(liste_joueurs):
+    liste_joueur_ordre_alphabetique = sorted(liste_joueurs)
+
+    return liste_joueur_ordre_alphabetique
+
+
+
 
 
 def creation_joueurs():

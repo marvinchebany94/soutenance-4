@@ -314,23 +314,18 @@ def matchs(paires):
 
         joueur_1 = paire[0]
         joueur_2 = paire[1]
-        update_points_joueurs(joueur_1, score_1)
-        update_points_joueurs(joueur_2, score_2)
+        score_j1 = update_points_joueurs(joueur_1, score_1)
+        score_j2 = update_points_joueurs(joueur_2, score_2)
 
+        print(joueur_1, " a : ",score_j1)
+        print(joueur_2, " a : ", score_j2)
 
-
-        tuple = [paire[0], score_1], [paire[1], score_2] #ajout d'un id unique
+        tuple = ([joueur_1, score_1], [joueur_2, score_2]) #ajout d'un id unique
 
         liste_matchs.append(tuple)
 
-
-
-    matchs_table.truncate()
+    #matchs_table.truncate()
     for m in liste_matchs:
-    #on va chercher à mettre à jours les points de chaque joueur en additionnant les points après chaque tour
-    #on va rechercher dans la base de données les points pour chaque joueurs
-
-
         tuple_match = Matchs(paire=m, tournois='rocket league')
 
         match_serialized = {
@@ -339,7 +334,8 @@ def matchs(paires):
         }
         matchs_table.insert(match_serialized)
 
-    print(matchs_table.all())
+    for match in matchs_table.all():
+        print("match : ",match)
     return liste_matchs
 
 def creation_tour(tournois,liste_matchs):
@@ -397,8 +393,8 @@ def changer_classement_joueurs():
 
 def update_points_joueurs(joueur, point_a_ajouter):
     joueur = joueur.split()
-    nom = joueur[0]
-    prenom = joueur[1]
+    nom = joueur[1]
+    prenom = joueur[0]
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')
     q = Query()
@@ -410,5 +406,98 @@ def update_points_joueurs(joueur, point_a_ajouter):
     print(query_player['points'])
     return query_player['points']
 
+def creation_paires_par_points_ou_classement(liste_joueurs):
+    groupe_0_pts = []
+    groupe_0_5_pts = []
+    groupe_1_pts = []
+    groupe_1_5_pts = []
+    groupe_2_pts = []
+    groupe_2_5_pts = []
+    groupe_3_pts = []
+    groupe_3_5pts = []
+    groupe_4_pts = []
+    for player in liste_joueurs:
+        nom = player[0]
+        prenom = player[1]
+        nom_prenom = nom + " " + prenom
+        db = TinyDB('db.json')
+        players_table = db.tabl('Joueurs')
+        q = Query()
+        player = players_table.search((q.nom == nom) and q.prenom == prenom)[0]
+        player_points = player['points']
+        if player_points == 0:
+            groupe_0_pts.append(nom_prenom)
+        if player_points == 0.5:
+            groupe_0_5_pts.append(nom_prenom)
+        if player_points == 1:
+            groupe_1_pts.append(nom_prenom)
+        if player_points == 0:
+            groupe_1_5_pts.append(nom_prenom)
+        if player_points == 2:
+            groupe_2_pts.append(nom_prenom)
+        if player_points == 0:
+            groupe_2_5_pts.append(nom_prenom)
+        if player_points == 3:
+            groupe_3_pts.append(nom_prenom)
+        if player_points == 0:
+            groupe_3_5_pts.append(nom_prenom)
+        if player_points == 4:
+            groupe_4_pts.append(nom_prenom)
 
+def search_classement(nom_prenom):
+    nom_prenom_split = nom_prenom.split()
+    nom = nom_prenom_split[0]
+    prenom = nom_prenom_split[1]
+    db = TinyDB('db.json')
+    players_table = db.table('Joueurs')
+    q = Query()
 
+    classement = players_table.search((q.nom == nom) and (q.prenom == prenom))[0]
+    classement = classement['classement']
+    return [nom_prenom, classement]
+
+def search_player_by_classement(classement):
+    db = TinyDB('db.json')
+    players_table = db.table('Joueurs')
+    q = Query()
+
+    player = players_table.search(q.classement == classement)[0]
+    player_identite = player['nom'] + " " + player['prenom']
+
+    return player_identite
+
+def liste_acteurs_odre_de_classement(liste_joueurs):
+    liste_classement_joueur = []
+    for player in liste_joueurs:
+        classement = search_classement(player)[1]
+        liste_classement_joueur.append(classement)
+
+    liste_joueur_ordre_croissant = sorted(liste_classement_joueur)
+    liste_acteurs_odre_de_classement = []
+    for classement in liste_joueur_ordre_croissant:
+        joueur = search_player_by_classement(classement)
+        liste_acteurs_odre_de_classement.append(joueur)
+
+    return liste_acteurs_odre_de_classement
+
+def liste_matchs_d_un_tournois(tournois):
+    db = TinyDB('db.json')
+    matchs_table = db.table('Matchs')
+    q = Query()
+    all_matchs = matchs_table.search(q.tournois == tournois)
+    for match in all_matchs:
+        joueur_1 = match['paire'][0][0]
+        joueur_2 = match['paire'][1][0]
+        score_1 = match['paire'][0][1]
+        if score_1 == 1:
+            vainqueur = joueur_1
+        elif score_1 == 0.5:
+            vainqueur = 'match nul'
+        else:
+            vainqueur = joueur_2
+        print("""
+            match :
+                {} vs {}
+            Vainqueur :
+                {}
+        """.format(joueur_1, joueur_2, vainqueur))
