@@ -527,3 +527,88 @@ def liste_tours_d_un_tournois(tournois):
                 {}
                 {}
         """.format(tournois, round, debut, fin, match1, match2, match3, match4))
+
+def liste_triee_tour_2(liste_joueurs):
+
+    groupe_1_pts = []
+    groupe_0_5_pts = []
+    groupe_0_pts = []
+    for player in liste_joueurs:
+        player = player.split()
+        nom = player[0]
+        prenom = player[1]
+        nom_prenom = nom + " " + prenom
+
+        db = TinyDB('db.json')
+        players_table = db.table('Joueurs')
+        q = Query()
+        player_query = players_table.search((q.nom == nom) and (q.prenom == prenom))[0]
+
+        player_points = player_query['points']
+        if player_points == 0:
+            groupe_0_pts.append(nom_prenom)
+        if player_points == 0.5:
+            groupe_0_5_pts.append(nom_prenom)
+        if player_points == 1:
+            groupe_1_pts.append(nom_prenom)
+    groupe_1_pts = liste_acteurs_odre_de_classement(groupe_1_pts)
+    groupe_0_5_pts = liste_acteurs_odre_de_classement(groupe_0_5_pts)
+    groupe_0_pts = liste_acteurs_odre_de_classement(groupe_0_pts)
+    liste_triee = groupe_1_pts + groupe_0_5_pts + groupe_0_pts
+    return liste_triee
+
+def liste_triee(liste_joueurs):
+    groupe_4_pts = []
+    groupe_3_5_pts = []
+    groupe_3_pts = []
+    groupe_2_5_pts = []
+    groupe_2_pts = []
+    groupe_1_5_pts = []
+    groupe_1_pts = []
+    groupe_0_5_pts = []
+    groupe_0_pts = []
+    listes = [groupe_4_pts, groupe_3_5_pts, groupe_3_pts, groupe_2_5_pts, groupe_2_pts, groupe_1_5_pts, groupe_1_pts,
+              groupe_0_5_pts, groupe_0_pts]
+
+    for player in liste_joueurs:
+        player = player.split()
+        nom = player[0]
+        prenom = player[1]
+        nom_prenom = nom + " " + prenom
+
+        db = TinyDB('db.json')
+        players_table = db.table('Joueurs')
+        q = Query()
+        player_query = players_table.search((q.nom == nom) and (q.prenom == prenom))[0]
+
+        player_points = player_query['points']
+        if player_points == 0:
+            groupe_0_pts.append(nom_prenom)
+        if player_points == 0.5:
+            groupe_0_5_pts.append(nom_prenom)
+        if player_points == 1:
+            groupe_1_pts.append(nom_prenom)
+        if player_points == 1.5:
+            groupe_1_5_pts.append(nom_prenom)
+        if player_points == 2:
+            groupe_2_pts.append(nom_prenom)
+        if player_points == 2.5:
+            groupe_1_pts.append(nom_prenom)
+        if player_points == 3:
+            groupe_3_pts.append(nom_prenom)
+        if player_points == 3.5:
+            groupe_3_5_pts.append(nom_prenom)
+        if player_points == 4:
+            groupe_4_pts.append(nom_prenom)
+    liste_triee = []
+    for liste in listes:
+
+        if len(liste) == 1:
+            liste_triee += liste
+        elif len(liste) == 0:
+            pass
+        else:
+            liste_ordre_croissant = liste_acteurs_odre_de_classement(liste)
+            liste_triee += liste_ordre_croissant
+
+    return liste_triee

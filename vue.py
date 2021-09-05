@@ -1,7 +1,7 @@
 import sys
 from fonctions import creation_tournois, creation_liste_joueur, add_players_to_tournament, creation_paires, matchs,\
     changer_classement_joueurs, creation_tour, creation_paires_tour_1, search_classement, search_player_by_classement, \
-    liste_acteurs_odre_de_classement, liste_matchs_d_un_tournois, liste_tours_d_un_tournois
+    liste_acteurs_odre_de_classement, liste_matchs_d_un_tournois, liste_tours_d_un_tournois, liste_triee
 from modele import creation_joueurs, liste_acteurs_odre_alphabetique, liste_joueurs
 
 def main():
@@ -30,7 +30,7 @@ def main():
             sys.exit()
 
         if commandes == "creer bdd":
-            creation_joueurs()
+            creation_joueurs('gta')
 
         if commandes == "test":
 
@@ -53,6 +53,9 @@ def main():
             add_players_to_tournament('new tournois')
             joueurs = liste_joueurs()
             liste_acteurs_odre_alphabetique(joueurs, 'new tournois')
+        if commandes == 'tour 2':
+            joueurs = liste_joueurs()
+            print(liste_triee(joueurs))
         else:
             print("Ta réponse ne figure pas dans la liste des choix.")
 main()

@@ -36,6 +36,7 @@ print(random.choice([0,0.5,1]))
 
 from modele import Joueur
 from tinydb import TinyDB, where,Query
+from fonctions import update_points_joueurs
 def joueur():
     db = TinyDB('Joueurs.json')
     q = Query()
@@ -70,4 +71,5 @@ def marvin():
     marvin = db.search(q.prenom == 'marvin')
     print(marvin)
 
-marvin()
+joueur = update_points_joueurs('decocq marvin', 4.5)
+print(joueur)
