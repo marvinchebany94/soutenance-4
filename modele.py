@@ -122,21 +122,4 @@ def creation_joueurs(tournois):
         }
         players_table.insert(serialized_player)
 
-"""
-serialized_tournois = {
-    'nom': tournois.nom,
-    'lieu':tournois.lieu,
-    'date':tournois.date,
-    'nombre de tour':tournois.nombre_de_tours,
-    'tournees':tournois.tournees,
-    'liste de joueurs':liste_joueur,
-    'description':tournois.description
-}
-
-tournois_table.insert(serialized_tournois)
-serialized_tournois = tournois_table.all()
-
-print(serialized_tournois)
-
-"""
 

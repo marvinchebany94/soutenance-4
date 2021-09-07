@@ -15,7 +15,7 @@ def time_now():
 
 def creation_tournois():
     #nom lieu date joueurs
-    print("Vous allez créer un tournois :")
+
     nom = input("Choisissez un nom pour le tournois : ")
     champ_vide(nom)
     verification_tournois_already_exists(nom)
@@ -72,17 +72,21 @@ def creation_tournois():
 
     print("Le tournois a bien été créé et enregistré.")
 
-def creation_liste_joueur():
+def choix_du_tournois():
     liste_tournois = liste_des_tournois()
 
-    print("""
-        Vous allez créer une liste de joueurs pour un tournois.
-        Veuillez selectionner un tournois dans la liste suivante :
-        {}
-    """.format(liste_tournois))
 
-    choix_du_tournois = input("choisissez le tournois auquel vous voulez ajouter des personnes : ")
+    print("""
+            Veuillez selectionner un tournois dans la liste suivante :
+            {}
+        """.format(liste_tournois))
+
+    choix_du_tournois = input("Choix du tournois : ")
     test_choix_du_tournois(choix_du_tournois)
+    return choix_du_tournois
+
+
+def creation_liste_joueur():
     i = 0
 
     db = TinyDB('db.json')
@@ -405,43 +409,6 @@ def update_points_joueurs(joueur, point_a_ajouter):
     print(query_player['points'])
     return query_player['points']
 
-def creation_paires_par_points_ou_classement(liste_joueurs):
-    groupe_0_pts = []
-    groupe_0_5_pts = []
-    groupe_1_pts = []
-    groupe_1_5_pts = []
-    groupe_2_pts = []
-    groupe_2_5_pts = []
-    groupe_3_pts = []
-    groupe_3_5pts = []
-    groupe_4_pts = []
-    for player in liste_joueurs:
-        nom = player[0]
-        prenom = player[1]
-        nom_prenom = nom + " " + prenom
-        db = TinyDB('db.json')
-        players_table = db.tabl('Joueurs')
-        q = Query()
-        player = players_table.search((q.nom == nom) and q.prenom == prenom)[0]
-        player_points = player['points']
-        if player_points == 0:
-            groupe_0_pts.append(nom_prenom)
-        if player_points == 0.5:
-            groupe_0_5_pts.append(nom_prenom)
-        if player_points == 1:
-            groupe_1_pts.append(nom_prenom)
-        if player_points == 0:
-            groupe_1_5_pts.append(nom_prenom)
-        if player_points == 2:
-            groupe_2_pts.append(nom_prenom)
-        if player_points == 0:
-            groupe_2_5_pts.append(nom_prenom)
-        if player_points == 3:
-            groupe_3_pts.append(nom_prenom)
-        if player_points == 0:
-            groupe_3_5_pts.append(nom_prenom)
-        if player_points == 4:
-            groupe_4_pts.append(nom_prenom)
 
 def search_classement(nom_prenom):
     nom_prenom_split = nom_prenom.split()
@@ -528,35 +495,6 @@ def liste_tours_d_un_tournois(tournois):
                 {}
         """.format(tournois, round, debut, fin, match1, match2, match3, match4))
 
-def liste_triee_tour_2(liste_joueurs):
-
-    groupe_1_pts = []
-    groupe_0_5_pts = []
-    groupe_0_pts = []
-    for player in liste_joueurs:
-        player = player.split()
-        nom = player[0]
-        prenom = player[1]
-        nom_prenom = nom + " " + prenom
-
-        db = TinyDB('db.json')
-        players_table = db.table('Joueurs')
-        q = Query()
-        player_query = players_table.search((q.nom == nom) and (q.prenom == prenom))[0]
-
-        player_points = player_query['points']
-        if player_points == 0:
-            groupe_0_pts.append(nom_prenom)
-        if player_points == 0.5:
-            groupe_0_5_pts.append(nom_prenom)
-        if player_points == 1:
-            groupe_1_pts.append(nom_prenom)
-    groupe_1_pts = liste_acteurs_odre_de_classement(groupe_1_pts)
-    groupe_0_5_pts = liste_acteurs_odre_de_classement(groupe_0_5_pts)
-    groupe_0_pts = liste_acteurs_odre_de_classement(groupe_0_pts)
-    liste_triee = groupe_1_pts + groupe_0_5_pts + groupe_0_pts
-    return liste_triee
-
 def liste_triee(liste_joueurs):
     groupe_4_pts = []
     groupe_3_5_pts = []
@@ -612,3 +550,7 @@ def liste_triee(liste_joueurs):
             liste_triee += liste_ordre_croissant
 
     return liste_triee
+
+def suppr_all_db():
+    db = TinyDB('db.json')
+    db.truncate()
