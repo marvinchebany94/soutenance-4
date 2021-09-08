@@ -76,25 +76,15 @@ def liste_acteurs_odre_alphabetique(liste_joueurs, tournois):
     else:
         liste_joueurs = []
         db = TinyDB('db.json')
-        tournois_table = db.table('Tournois')
+        players_table = db.table('Joueurs')
         q = Query()
-        tournament = tournois_table.search(q.nom == tournois)[0]
-        print("Voici la liste des joueurs dans le tournois {} : ".format(tournois))
-        player_in_tournament = tournament['liste des joueurs']
-        print(player_in_tournament)
+        players = players_table.search(q.tournois == tournois)
 
-        for player in player_in_tournament:
-            player = player.split()
-            nom_prenom = player[0] + " " + player[1]
+        for player in players:
+            nom_prenom = player['nom'] + " " + player['prenom']
             liste_joueurs.append(nom_prenom)
         liste_joueur_odre_alphabetique = sorted(liste_joueurs)
         print(liste_joueur_odre_alphabetique)
-
-
-
-
-
-
 
 def creation_joueurs(tournois):
 

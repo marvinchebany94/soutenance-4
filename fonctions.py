@@ -298,7 +298,7 @@ def creation_paires_tour_1():
 
 #on crée une fonction qui prendra en paramétre la paire, le score et qui va retourner un tuple contenant
 #2 listes avec instance de joueur + le score
-def matchs(paires):
+def matchs(tournois, paires):
 
     liste_matchs = []
 
@@ -324,12 +324,12 @@ def matchs(paires):
         print(joueur_2, " a : ", score_j2)
 
         tuple = ([joueur_1, score_1], [joueur_2, score_2]) #ajout d'un id unique
-
         liste_matchs.append(tuple)
+
 
     #matchs_table.truncate()
     for m in liste_matchs:
-        tuple_match = Matchs(paire=m, tournois='rocket league')
+        tuple_match = Matchs(paire=m, tournois=tournois)
 
         match_serialized = {
             'paire':tuple_match.paire,
@@ -337,7 +337,7 @@ def matchs(paires):
         }
         matchs_table.insert(match_serialized)
 
-    for match in matchs_table.all():
+    for match in matchs_table.all()[-4:-1]:
         print("match : ",match)
     return liste_matchs
 
@@ -345,6 +345,7 @@ def creation_tour(tournois,liste_matchs):
     #on va voir si un tour existe déjà pour le tournois en question
     db = TinyDB('db.json')
     tours_table = db.table('Tours')
+    q = Query()
 
     #on recherche si un round existe et est associé au tournois ou non :
     resultat = tours_table.search(where('tournois') == tournois)
@@ -362,11 +363,32 @@ def creation_tour(tournois,liste_matchs):
 
         }
         tours_table.insert(tour_serialized)
-        tours_table = tours_table.search(where('tournois') == tournois)
+        tours_table = tours_table.search(where('tournois') == tournois)[-1]
         print("""
             Le {} a bien été enregistré :
             {}
         """.format(tour.nom, tours_table))
+    else:
+        find_last_round = tours_table.search(q.tournois == tournois)[-1]
+        round_number = int(find_last_round['nom'][-1])
+        round_number += 1
+        nom = "Round " + str(round_number)
+        fin = time_now()
+        tour = Tours(nom=nom, debut=None, fin=fin, match=liste_matchs, tournois=tournois)
+        tour_serialized = {
+            'nom': tour.nom,
+            'debut': tour.debut,
+            'fin': tour.fin,
+            'match': tour.match,
+            'tournois': tour.tournois
+
+        }
+        tours_table.insert(tour_serialized)
+        tours_table = tours_table.search(where('tournois') == tournois)[-1]
+        print("""
+                    Le {} a bien été enregistré :
+                    {}
+                """.format(tour.nom, tours_table))
 
 def changer_classement_joueurs():
 
@@ -418,8 +440,8 @@ def search_classement(nom_prenom):
     players_table = db.table('Joueurs')
     q = Query()
 
-    classement = players_table.search((q.nom == nom) and (q.prenom == prenom))[0]
-    classement = classement['classement']
+    player = players_table.search((q.nom == nom) and (q.prenom == prenom))[0]
+    classement = player['classement']
     return [nom_prenom, classement]
 
 def search_player_by_classement(classement):
@@ -435,8 +457,8 @@ def search_player_by_classement(classement):
 def liste_acteurs_odre_de_classement(liste_joueurs):
     liste_classement_joueur = []
     for player in liste_joueurs:
-        classement = search_classement(player)[1]
-        liste_classement_joueur.append(classement)
+        classement = search_classement(player)
+        liste_classement_joueur.append(classement[1])
 
     liste_joueur_ordre_croissant = sorted(liste_classement_joueur)
     liste_acteurs_odre_de_classement = []
@@ -451,7 +473,9 @@ def liste_matchs_d_un_tournois(tournois):
     matchs_table = db.table('Matchs')
     q = Query()
     all_matchs = matchs_table.search(q.tournois == tournois)
+    liste_matchs = []
     for match in all_matchs:
+        liste_matchs.append(match)
         joueur_1 = match['paire'][0][0]
         joueur_2 = match['paire'][1][0]
         score_1 = match['paire'][0][1]
@@ -467,6 +491,7 @@ def liste_matchs_d_un_tournois(tournois):
             Vainqueur :
                 {}
         """.format(joueur_1, joueur_2, vainqueur))
+    return liste_matchs
 
 def liste_tours_d_un_tournois(tournois):
     db = TinyDB('db.json')
@@ -474,26 +499,8 @@ def liste_tours_d_un_tournois(tournois):
     q = Query()
     all_tours = tours_table.search(q.tournois == tournois)
     for tour in all_tours:
-        round = tour['nom']
-        debut = tour['debut']
-        fin = tour['fin']
-        match = tour['match']
-        match1 = str(match[0])
-        match2 = str(match[1])
-        match3 = str(match[2])
-        match4 = str(match[3])
-
-        print("""
-            Les tours correspondent au tournois " {} "
-            Round : {}
-            début : {}
-            fin : {}
-            liste des matchs : 
-                {}
-                {}
-                {}
-                {}
-        """.format(tournois, round, debut, fin, match1, match2, match3, match4))
+        print(tour)
+        print('\n')
 
 def liste_triee(liste_joueurs):
     groupe_4_pts = []
@@ -554,3 +561,4 @@ def liste_triee(liste_joueurs):
 def suppr_all_db():
     db = TinyDB('db.json')
     db.truncate()
+

@@ -23,12 +23,16 @@ def main():
     print("""
                 ----------Chess Tournament Creator----------
             """)
-    print(LISTE_COMMANDES_GENERALES)
 
-    liste_commandes_generales = ["1", "2", "3", "4", "5", "6", "7", "q"]
+    liste_commandes_generales = ["1", "2", "3", "4", "5", "q"]
+    liste_commandes_pour_les_tournois = ["1", "2", "3", "4", "5", "6", "7", "q"]
 
     while True:
+        print("""
+        ----- Menu principal -----
+        """)
 
+        print(LISTE_COMMANDES_GENERALES)
         commandes = input('Entrez votre commande : ')
         cmd = commandes_verifications(liste_commandes_generales, commandes)
 
@@ -48,7 +52,7 @@ def main():
             print("""
             ~VOUS ALLEZ CHOISIR UN TOURNOIS : ~            
             """)
-            choix_du_tournois()
+            tournois = choix_du_tournois()
 
         if cmd == "3":
             print("""
@@ -71,56 +75,64 @@ def main():
             print(liste_des_tournois())
 
         while cmd == "2":
-            print(LISTE_COMMANDES_POUR_LES_TOURNOIS)
-            break
 
-        commandes = input("(creer | choisir | modifier classement | creer bdd | test | q pour quitter) : ")
-        if commandes == "creer":
-            creation_tournois()
-            #tournois = creation_liste_joueur()
-            #add_players_to_tournament(tournois)
-            #paires = creation_paires()
-            #print(paires)
-        if commandes == "choisir":
-            tournois = creation_liste_joueur()
+            while True:
+                print("""
+                      -----------TOURNOIS ' {} '-----------
+                """.format(tournois))
 
-        if commandes == "modifier classement":
-            #creation_joueurs()
-            changer_classement_joueurs()
+                print(LISTE_COMMANDES_POUR_LES_TOURNOIS)
 
-        if commandes == "q":
-            print("Vous allez quitter le script.")
-            sys.exit()
+                cmd = input('Entrez votre commande : ')
+                commande = commandes_verifications(liste_commandes_pour_les_tournois, cmd)
 
-        if commandes == "creer bdd":
-            creation_joueurs('gta')
+                if commande == "q":
+                    break
 
-        if commandes == "test":
+                if commande == "1":
+                    creation_joueurs(tournois)
+                    liste_des_joueurs = liste_joueurs()
+                    add_players_to_tournament(tournois)
 
-            paires = creation_paires()
-            liste_matchs = matchs(paires)
-            print(liste_matchs)
-        if commandes == 'liste ordre alphabetique':
-            liste_des_joueurs = liste_joueurs()
-            liste_acteurs_odre_alphabetique(liste_des_joueurs)
-        if commandes == "classement":
-            liste_des_joueurs = liste_joueurs()
-            print(liste_acteurs_odre_de_classement(liste_des_joueurs))
-        if commandes == 'matchs':
-            liste_matchs_d_un_tournois('rocket league')
-        if commandes == 'tours':
-            matchs_liste = matchs(PAIRES)
-            creation_tour('rocket league', matchs_liste)
-            liste_tours_d_un_tournois('rocket league')
-        if commandes == "add":
-            add_players_to_tournament('new tournois')
-            joueurs = liste_joueurs()
-            liste_acteurs_odre_alphabetique(joueurs, 'new tournois')
-        if commandes == 'tour 2':
-            joueurs = liste_joueurs()
-            print(liste_triee(joueurs))
-        if commandes == "suppr":
-            suppr_all_db()
-        else:
-            print("Ta réponse ne figure pas dans la liste des choix.")
+                if commande == "2":
+                    paires = creation_paires()
+                    liste_des_matchs = matchs(tournois, paires)
+                    print(liste_des_matchs)
+
+                    creation_tour(tournois, liste_des_matchs)
+
+                    liste_tours_d_un_tournois(tournois)
+
+                if commande == "3":
+                    changer_classement_joueurs()
+
+                if commande == "4":
+                    print("""
+                        ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR ODRE ALPHABETIQUE : ~            
+                    """)
+                    liste_des_joueurs = liste_joueurs()
+                    liste_acteurs_odre_alphabetique(liste_des_joueurs, tournois)
+
+                if commande == "5":
+                    print("""
+                        ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR ODRE DE CLASSEMENT : ~            
+                    """)
+                    liste_des_joueurs = liste_joueurs()
+                    print(liste_acteurs_odre_de_classement(liste_des_joueurs))
+
+                if commande == "6":
+                    print("""
+                    
+                        VOUS ALLEZ VOIR LA LISTE DE TOUS LES TOURS DU TOURNOIS :
+                        
+                    """)
+                    liste_tours_d_un_tournois(tournois)
+
+                if commande == "7":
+                    print("""
+
+                        VOUS ALLEZ VOIR LA LISTE DE TOUS LES MATCHS DU TOURNOIS :
+
+                    """)
+                    liste_matchs_d_un_tournois(tournois)
 main()
