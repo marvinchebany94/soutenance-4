@@ -71,5 +71,4 @@ def marvin():
     marvin = db.search(q.prenom == 'marvin')
     print(marvin)
 
-joueur = update_points_joueurs('decocq marvin', 4.5)
-print(joueur)
+

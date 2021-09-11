@@ -91,14 +91,14 @@ def liste_acteurs_odre_alphabetique(liste_joueurs, tournois):
 
 def creation_joueurs(tournois):
 
-    marvin = Joueur("decocq", "marvin", "20/07/98", "m", 1, tournois, 0, None)
-    marvin2 = Joueur("chebany", "rocket", "20/07/98", "m", 3, tournois, 0, None)
-    marvin3 = Joueur("dunoyer", "kahyss", "16/03/2019", "m", 10, tournois, 0, None)
-    loan = Joueur("dunoyer", "loan", "01/11/00", "f", 100, tournois, 0, None)
-    papa = Joueur("decocq", "martial", "13/10/71", "m", 41, tournois, 0, None)
-    maman = Joueur("chebany", "angela", "16/03/2019", "f", 2, tournois, 0, None)
-    mamie = Joueur("chebany", "henriette", "09/06/50", "f", 34, tournois, 0, None)
-    papy = Joueur("chebany", "cheban", "12/04/44", "m", 68, tournois, 0, None)
+    marvin = Joueur("decocq", "marvin", "20/07/98", "m", 1, tournois, 0, [])
+    marvin2 = Joueur("chebany", "rocket", "20/07/98", "m", 3, tournois, 0, [])
+    marvin3 = Joueur("dunoyer", "kahyss", "16/03/2019", "m", 10, tournois, 0, [])
+    loan = Joueur("dunoyer", "loan", "01/11/00", "f", 100, tournois, 0, [])
+    papa = Joueur("decocq", "martial", "13/10/71", "m", 41, tournois, 0, [])
+    maman = Joueur("chebany", "angela", "16/03/2019", "f", 2, tournois, 0, [])
+    mamie = Joueur("chebany", "henriette", "09/06/50", "f", 34, tournois, 0, [])
+    papy = Joueur("chebany", "cheban", "12/04/44", "m", 68, tournois, 0, [])
     liste_des_joueurs = [marvin, marvin2, marvin3, loan, papa, maman, mamie, papy]
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')

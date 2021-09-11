@@ -300,6 +300,7 @@ def creation_paires_tour_1():
 #2 listes avec instance de joueur + le score
 def matchs(tournois, paires):
 
+    tournois= tournois
     liste_matchs = []
 
     db = TinyDB('db.json')
@@ -558,5 +559,29 @@ def liste_triee(liste_joueurs):
 
     return liste_triee
 
-def creating_paires(liste_joueurs_tries):
+def update_joueurs_affrontes(tournois, joueur, joueur_a_ajouter):
+    joueur = joueur.split()
+    nom = joueur[0]
+    prenom = joueur[1]
+    db = TinyDB('db.json')
+    players_table = db.table('Joueurs')
+    q = Query()
+    player = players_table.search((q.nom == nom) & (q.prenom == prenom) & (q.tournois == tournois))[0]
+    print(player)
+
+    liste_joueur_to_add = []
+    if player['liste joueurs affrontes'] == []:
+        print('liste vide')
+    else:
+        for p in player['liste joueurs affrontes']:
+            liste_joueur_to_add.append(p)
+
+    liste_joueur_to_add.append(joueur_a_ajouter)
+    player_update = players_table.update({'liste joueurs affrontes':liste_joueur_to_add},
+                                         (q.nom == nom) & (q.prenom == prenom) & (q.tournois == tournois))
+    print(player)
+
+update_joueurs_affrontes('rocket league', 'decocq marvin', 'kaydrop')
+
+
 
