@@ -318,8 +318,18 @@ def matchs(tournois, paires):
 
         joueur_1 = paire[0]
         joueur_2 = paire[1]
+
         score_j1 = update_points_joueurs(joueur_1, score_1)
         score_j2 = update_points_joueurs(joueur_2, score_2)
+
+        j1 = joueur_1.split()
+        j2 = joueur_2.split()
+        nom_prenom_j1 = j1[1] + " " + j1[0]
+        nom_prenom_j2 = j2[1] + " " + j2[0]
+
+
+        update_joueurs_affrontes(tournois, nom_prenom_j1, nom_prenom_j2)
+        update_joueurs_affrontes(tournois, nom_prenom_j2, nom_prenom_j1)
 
         print(joueur_1, " a : ",score_j1)
         print(joueur_2, " a : ", score_j2)
@@ -581,7 +591,7 @@ def update_joueurs_affrontes(tournois, joueur, joueur_a_ajouter):
                                          (q.nom == nom) & (q.prenom == prenom) & (q.tournois == tournois))
     print(player)
 
-update_joueurs_affrontes('rocket league', 'decocq marvin', 'kaydrop')
+
 
 
 
