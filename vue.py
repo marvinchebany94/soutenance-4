@@ -123,7 +123,7 @@ def main():
                 if commande == "6":
                     print("""
                     
-                        VOUS ALLEZ VOIR LA LISTE DE TOUS LES TOURS DU TOURNOIS :
+                        VOUS ALLEZ VOIR LA LISTE DE TOURS LES TOURS DU TOURNOIS :
                         
                     """)
                     liste_tours_d_un_tournois(tournois)

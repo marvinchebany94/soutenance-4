@@ -558,7 +558,5 @@ def liste_triee(liste_joueurs):
 
     return liste_triee
 
-def suppr_all_db():
-    db = TinyDB('db.json')
-    db.truncate()
+def creating_paires(liste_joueurs_tries):
 

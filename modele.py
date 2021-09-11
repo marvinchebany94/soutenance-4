@@ -6,7 +6,8 @@ Dans ce fichier on va créer toutes les classes pour le script
 """
 
 class Joueur:
-    def __init__(self, nom, prenom, date_de_naissance, sexe, classement, tournois, points):
+    def __init__(self, nom, prenom, date_de_naissance, sexe, classement, tournois, points,
+                 joueurs_affrontes):
         self.nom = nom
         self.prenom = prenom
         self.date_de_naissance = date_de_naissance
@@ -15,6 +16,8 @@ class Joueur:
         self.tournois = tournois
         self.points = points
         points = 0
+        self.joueurs_affrontes = joueurs_affrontes
+        joueurs_affrontes = []
 
 class Tournois:
     def __init__(self, nom, lieu, date, nombre_de_tours, tournees, liste_des_joueurs, controle_du_temps, description,
@@ -88,14 +91,14 @@ def liste_acteurs_odre_alphabetique(liste_joueurs, tournois):
 
 def creation_joueurs(tournois):
 
-    marvin = Joueur("decocq", "marvin", "20/07/98", "m", 1, tournois, 0)
-    marvin2 = Joueur("chebany", "rocket", "20/07/98", "m", 3, tournois, 0)
-    marvin3 = Joueur("dunoyer", "kahyss", "16/03/2019", "m", 10, tournois, 0)
-    loan = Joueur("dunoyer", "loan", "01/11/00", "f", 100, tournois, 0)
-    papa = Joueur("decocq", "martial", "13/10/71", "m", 41, tournois, 0)
-    maman = Joueur("chebany", "angela", "16/03/2019", "f", 2, tournois, 0)
-    mamie = Joueur("chebany", "henriette", "09/06/50", "f", 34, tournois, 0)
-    papy = Joueur("chebany", "cheban", "12/04/44", "m", 68, tournois, 0)
+    marvin = Joueur("decocq", "marvin", "20/07/98", "m", 1, tournois, 0, None)
+    marvin2 = Joueur("chebany", "rocket", "20/07/98", "m", 3, tournois, 0, None)
+    marvin3 = Joueur("dunoyer", "kahyss", "16/03/2019", "m", 10, tournois, 0, None)
+    loan = Joueur("dunoyer", "loan", "01/11/00", "f", 100, tournois, 0, None)
+    papa = Joueur("decocq", "martial", "13/10/71", "m", 41, tournois, 0, None)
+    maman = Joueur("chebany", "angela", "16/03/2019", "f", 2, tournois, 0, None)
+    mamie = Joueur("chebany", "henriette", "09/06/50", "f", 34, tournois, 0, None)
+    papy = Joueur("chebany", "cheban", "12/04/44", "m", 68, tournois, 0, None)
     liste_des_joueurs = [marvin, marvin2, marvin3, loan, papa, maman, mamie, papy]
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')
@@ -108,7 +111,8 @@ def creation_joueurs(tournois):
             'sexe':player.sexe,
             'classement':player.classement,
             'tournois':player.tournois,
-            'points':player.points
+            'points':player.points,
+            'liste joueurs affrontes':player.joueurs_affrontes
         }
         players_table.insert(serialized_player)
 

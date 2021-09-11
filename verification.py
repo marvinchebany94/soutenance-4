@@ -69,7 +69,7 @@ def classement_verification(classement):
         classement = input(": ")
         classement_verification(classement)
         break
-    return classement
+    return int(classement)
 
 def commandes_verifications(liste, commande):
     try:
