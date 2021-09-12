@@ -1,7 +1,7 @@
 import sys
 from tinydb import TinyDB
 from fonctions import creation_tournois, creation_liste_joueur, add_players_to_tournament, creation_paires, matchs,\
-    changer_classement_joueurs, creation_tour, creation_paires_tour_1, search_classement, search_player_by_classement, \
+    changer_classement_joueurs, creation_tour, search_classement, search_player_by_classement, \
     liste_acteurs_odre_de_classement, liste_matchs_d_un_tournois, liste_tours_d_un_tournois, liste_triee, \
     choix_du_tournois, etape_3_4_systeme_suisse, creating_paires, nombre_de_tours
 from modele import creation_joueurs, liste_acteurs_odre_alphabetique, liste_joueurs, liste_des_tournois
@@ -95,7 +95,7 @@ def main():
                     print("""
                         VOUS ALLEZ CREER LE TOUR NUMERO {}
                     """.format(numero_tour))
-                    if numero_tour == 4:
+                    if numero_tour == 5:
                         print("""
                         VOUS NE POUVEZ PLUS CREER DE TOURS, LE TOURNOIS EST TERMINE.
                         VEUILLEZ INDIQUER UN NOUVEAU CLASSEMENT POUR CHAQUE JOUEURS.

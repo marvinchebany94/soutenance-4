@@ -389,7 +389,7 @@ def changer_classement_joueurs():
         Voici la liste des joueurs dans la base de données :
         {}
     """.format(liste_des_joueurs))
-    nom_prenom = input("Choissisez la personne à qui vous voulez modifier le classement : ")
+    nom_prenom = input("Choisissez la personne à qui vous voulez modifier le classement : ")
     nom_prenom = nom_prenom.split(" ")
 
     try:
@@ -409,7 +409,7 @@ def update_points_joueurs(joueur, point_a_ajouter):
     la fonction va chercher la colonne d'un joueur dans la table des Joueurs.
     Elle va additioner les points actuels avec les points à ajouter.
     Puis faire une mise à jours des points du joueurs, et l'enregistrer dans la base de données.
-    :param joueur: Joueur auqeul on va ajouter des points
+    :param joueur: Joueur auquel on va ajouter des points
     :param point_a_ajouter: Nombre de points à lui ajouter
     :return: le nombre de points que le joueur a après la mise à jours de la base de données.
     """
@@ -637,7 +637,7 @@ def etape_3_4_systeme_suisse(liste_joueurs, tournois):
     """
     la fonction correspond à l'étape 3 et 4 du système suisse.
     Pour créer une paire on va faire joueur 1 vs joueur 2, si le joueur 2 a déjà été affronté par le joueur 1,
-    alors le joueur 1 affronte le 3, et aisi de suite.
+    alors le joueur 1 affronte le 3, et ainsi de suite.
     lorsqu'une paire est créée, les 2 joueurs sont supprimés de la liste, et l'algorithme fait la même chose pour les
     joueurs 1 et 2 de la nouvelle liste.
     :param liste_joueurs: liste des joueurs triès par la fonction liste_triee()
@@ -667,7 +667,7 @@ def creating_paires(tournois, liste_joueurs):
     :param tournois: tournois en question
     :param liste_joueurs: liste des joueurs contenant pour chaque joueurs un nom et prénom
     :return: les 4 paires contenant le nom et prénom des 2 adversaires. Ces paires seront utilisées dans la fonction
-    match()
+    matchs()
     """
 
     paire_1 = etape_3_4_systeme_suisse(liste_joueurs, tournois)
@@ -702,6 +702,5 @@ def nombre_de_tours(tournois):
     table_recherche = table.search(q.tournois == tournois)
     resultat = len(table_recherche) + 1
     return resultat
-
 
 
