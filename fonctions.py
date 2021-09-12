@@ -190,7 +190,7 @@ def creation_paires():
         #on crée une boucle for pour prendre seulement le prénom et l'ajouter à la liste
         for infos in player_infos:
             print(infos['prenom'])
-            prenom_nom = infos['prenom'] + " " + infos['nom']
+            prenom_nom = infos['nom'] + " " + infos['prenom']
             liste_classement_joueur_avec_nom.append(prenom_nom)
 
     #on crée les 2 groupes
@@ -300,7 +300,7 @@ def creation_paires_tour_1():
 #2 listes avec instance de joueur + le score
 def matchs(tournois, paires):
 
-    tournois= tournois
+    tournois = tournois
     liste_matchs = []
 
     db = TinyDB('db.json')
@@ -319,13 +319,15 @@ def matchs(tournois, paires):
         joueur_1 = paire[0]
         joueur_2 = paire[1]
 
+        print("joueur1 = ",joueur_1)
+
         score_j1 = update_points_joueurs(joueur_1, score_1)
         score_j2 = update_points_joueurs(joueur_2, score_2)
 
         j1 = joueur_1.split()
         j2 = joueur_2.split()
-        nom_prenom_j1 = j1[1] + " " + j1[0]
-        nom_prenom_j2 = j2[1] + " " + j2[0]
+        nom_prenom_j1 = j1[0] + " " + j1[1]
+        nom_prenom_j2 = j2[0] + " " + j2[1]
 
 
         update_joueurs_affrontes(tournois, nom_prenom_j1, nom_prenom_j2)
@@ -429,12 +431,12 @@ def changer_classement_joueurs():
 
 def update_points_joueurs(joueur, point_a_ajouter):
     joueur = joueur.split()
-    nom = joueur[1]
-    prenom = joueur[0]
+    nom = joueur[0]
+    prenom = joueur[1]
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')
     q = Query()
-    query_player = players_table.search((q.nom == nom and q.prenom == prenom))[0]
+    query_player = players_table.search((q.nom == nom) and (q.prenom == prenom))[0]
     points_actuels = query_player['points']
     points_finaux = points_actuels + point_a_ajouter
     player_updating = players_table.update({'points':points_finaux}, (q.nom == nom and q.prenom == prenom))
@@ -593,5 +595,65 @@ def update_joueurs_affrontes(tournois, joueur, joueur_a_ajouter):
 
 
 
+def liste_joueurs_affrontes(joueur, tournois):
+    joueur = joueur.split()
+    nom = joueur[0]
+    prenom = joueur[1]
 
+    db = TinyDB('db.json')
+    players_table = db.table('Joueurs')
+    q = Query()
+
+    player = players_table.search((q.nom == nom) & (q.prenom == prenom) & (q.tournois == tournois))[0]
+    liste_joueurs_affrontes = player['liste joueurs affrontes']
+
+    return liste_joueurs_affrontes
+
+def etape_3_4_systeme_suisse(liste_joueurs, tournois):
+    liste = liste_joueurs
+
+
+    liste_joueurs_affrontes_par_j1 = liste_joueurs_affrontes(liste[0], tournois)
+    print("liste des joueurs affrontès par j1 : ",liste_joueurs_affrontes_par_j1)
+    i = 1
+    while True:
+        if liste[i] not in liste_joueurs_affrontes_par_j1:
+            paire = [liste[0], liste[i]]
+            liste.remove(liste[0])
+            liste.remove(liste[i-1])
+            break
+        else:
+            i += 1
+            continue
+    return liste, paire
+
+def creating_paires(tournois, liste_joueurs):
+
+    paire_1 = etape_3_4_systeme_suisse(liste_joueurs, tournois)
+    print('paire 1 : ', paire_1[1])
+    nouvelle_liste = paire_1[0]
+    print('nouvelle liste : ',nouvelle_liste)
+
+    paire_2 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
+    print('paire 2 : ',paire_2[1])
+    nouvelle_liste = paire_2[0]
+    print('nouvelle liste : ', nouvelle_liste)
+
+    paire_3 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
+    print('paire 3 : ', paire_3[1])
+    nouvelle_liste = paire_3[0]
+    print('nouvelle liste : ', nouvelle_liste)
+
+    paire_4 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
+    print('paire 4 : ', paire_4[1])
+
+    return paire_1[1], paire_2[1], paire_3[1], paire_4[1]
+
+def nombre_de_tours(tournois):
+    db = TinyDB('db.json')
+    table = db.table('Tours')
+    q = Query()
+    table_recherche = table.search(q.tournois == tournois)
+    resultat = len(table_recherche) + 1
+    return resultat
 

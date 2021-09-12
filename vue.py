@@ -3,7 +3,7 @@ from tinydb import TinyDB
 from fonctions import creation_tournois, creation_liste_joueur, add_players_to_tournament, creation_paires, matchs,\
     changer_classement_joueurs, creation_tour, creation_paires_tour_1, search_classement, search_player_by_classement, \
     liste_acteurs_odre_de_classement, liste_matchs_d_un_tournois, liste_tours_d_un_tournois, liste_triee, \
-    choix_du_tournois
+    choix_du_tournois, etape_3_4_systeme_suisse, creating_paires, nombre_de_tours
 from modele import creation_joueurs, liste_acteurs_odre_alphabetique, liste_joueurs, liste_des_tournois
 from verification import commandes_verifications
 
@@ -28,6 +28,7 @@ def main():
     liste_commandes_pour_les_tournois = ["1", "2", "3", "4", "5", "6", "7", "q"]
 
     while True:
+
         print("""
         ----- Menu principal -----
         """)
@@ -95,13 +96,30 @@ def main():
                     add_players_to_tournament(tournois)
 
                 if commande == "2":
-                    paires = creation_paires()
-                    liste_des_matchs = matchs(tournois, paires)
-                    print(liste_des_matchs)
+                    numero_tour = nombre_de_tours(tournois)
+                    print("""
+                        VOUS ALLEZ CREER LE TOUR NUMERO {}
+                    """.format(numero_tour))
 
-                    creation_tour(tournois, liste_des_matchs)
+                    if numero_tour == 1:
+                        paires = creation_paires()
+                        liste_des_matchs = matchs(tournois, paires)
+                        print(liste_des_matchs)
+                        creation_tour(tournois, liste_des_matchs)
+                        liste_tours_d_un_tournois(tournois)
+                    else:
+                        print("""
+                            TOUR {} :
+                        """.format(numero_tour))
 
-                    liste_tours_d_un_tournois(tournois)
+                        liste_des_joueurs = liste_joueurs()
+                        l_triee = liste_triee(liste_des_joueurs)
+                        print(l_triee)
+                        all_paires = creating_paires(tournois, l_triee)
+                        print(paires)
+                        liste_des_matchs = matchs(tournois, all_paires)
+                        creation_tour(tournois, liste_des_matchs)
+                        liste_tours_d_un_tournois(tournois)
 
                 if commande == "3":
                     changer_classement_joueurs()
