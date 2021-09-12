@@ -106,7 +106,7 @@ def main():
                         liste_des_matchs = matchs(tournois, paires)
                         print(liste_des_matchs)
                         creation_tour(tournois, liste_des_matchs)
-                        liste_tours_d_un_tournois(tournois)
+
                     else:
                         print("""
                             TOUR {} :
@@ -114,12 +114,10 @@ def main():
 
                         liste_des_joueurs = liste_joueurs()
                         l_triee = liste_triee(liste_des_joueurs)
-                        print(l_triee)
                         all_paires = creating_paires(tournois, l_triee)
-                        print(paires)
                         liste_des_matchs = matchs(tournois, all_paires)
                         creation_tour(tournois, liste_des_matchs)
-                        liste_tours_d_un_tournois(tournois)
+
 
                 if commande == "3":
                     changer_classement_joueurs()

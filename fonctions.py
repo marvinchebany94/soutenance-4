@@ -319,8 +319,6 @@ def matchs(tournois, paires):
         joueur_1 = paire[0]
         joueur_2 = paire[1]
 
-        print("joueur1 = ",joueur_1)
-
         score_j1 = update_points_joueurs(joueur_1, score_1)
         score_j2 = update_points_joueurs(joueur_2, score_2)
 
@@ -333,12 +331,8 @@ def matchs(tournois, paires):
         update_joueurs_affrontes(tournois, nom_prenom_j1, nom_prenom_j2)
         update_joueurs_affrontes(tournois, nom_prenom_j2, nom_prenom_j1)
 
-        print(joueur_1, " a : ",score_j1)
-        print(joueur_2, " a : ", score_j2)
-
         tuple = ([joueur_1, score_1], [joueur_2, score_2]) #ajout d'un id unique
         liste_matchs.append(tuple)
-
 
     #matchs_table.truncate()
     for m in liste_matchs:
@@ -350,8 +344,25 @@ def matchs(tournois, paires):
         }
         matchs_table.insert(match_serialized)
 
-    for match in matchs_table.all()[-4:-1]:
-        print("match : ",match)
+    for match in matchs_table.all()[-4:len(matchs_table)]:
+
+        liste_matchs.append(match)
+        joueur_1 = match['paire'][0][0]
+        joueur_2 = match['paire'][1][0]
+        score_1 = match['paire'][0][1]
+        if score_1 == 1:
+            vainqueur = joueur_1
+        elif score_1 == 0.5:
+            vainqueur = 'match nul'
+        else:
+            vainqueur = joueur_2
+        print("""
+            match :
+                {} vs {}
+            Vainqueur :
+                {}
+        """.format(joueur_1, joueur_2, vainqueur))
+
     return liste_matchs
 
 def creation_tour(tournois,liste_matchs):
@@ -441,7 +452,7 @@ def update_points_joueurs(joueur, point_a_ajouter):
     points_finaux = points_actuels + point_a_ajouter
     player_updating = players_table.update({'points':points_finaux}, (q.nom == nom and q.prenom == prenom))
     query_player = players_table.search((q.nom == nom) and (q.prenom == prenom))[0]
-    print(query_player['points'])
+
     return query_player['points']
 
 
@@ -579,7 +590,6 @@ def update_joueurs_affrontes(tournois, joueur, joueur_a_ajouter):
     players_table = db.table('Joueurs')
     q = Query()
     player = players_table.search((q.nom == nom) & (q.prenom == prenom) & (q.tournois == tournois))[0]
-    print(player)
 
     liste_joueur_to_add = []
     if player['liste joueurs affrontes'] == []:
@@ -591,8 +601,6 @@ def update_joueurs_affrontes(tournois, joueur, joueur_a_ajouter):
     liste_joueur_to_add.append(joueur_a_ajouter)
     player_update = players_table.update({'liste joueurs affrontes':liste_joueur_to_add},
                                          (q.nom == nom) & (q.prenom == prenom) & (q.tournois == tournois))
-    print(player)
-
 
 
 def liste_joueurs_affrontes(joueur, tournois):
@@ -614,7 +622,6 @@ def etape_3_4_systeme_suisse(liste_joueurs, tournois):
 
 
     liste_joueurs_affrontes_par_j1 = liste_joueurs_affrontes(liste[0], tournois)
-    print("liste des joueurs affrontès par j1 : ",liste_joueurs_affrontes_par_j1)
     i = 1
     while True:
         if liste[i] not in liste_joueurs_affrontes_par_j1:
@@ -632,17 +639,17 @@ def creating_paires(tournois, liste_joueurs):
     paire_1 = etape_3_4_systeme_suisse(liste_joueurs, tournois)
     print('paire 1 : ', paire_1[1])
     nouvelle_liste = paire_1[0]
-    print('nouvelle liste : ',nouvelle_liste)
+
 
     paire_2 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
     print('paire 2 : ',paire_2[1])
     nouvelle_liste = paire_2[0]
-    print('nouvelle liste : ', nouvelle_liste)
+
 
     paire_3 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
     print('paire 3 : ', paire_3[1])
     nouvelle_liste = paire_3[0]
-    print('nouvelle liste : ', nouvelle_liste)
+
 
     paire_4 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
     print('paire 4 : ', paire_4[1])
