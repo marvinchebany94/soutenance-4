@@ -91,8 +91,11 @@ def choix_du_tournois():
 
     print("""
             Veuillez selectionner un tournois dans la liste suivante :
-            {}
-        """.format(liste_tournois))
+        """)
+
+    for tournois in liste_tournois:
+        print('- ',tournois)
+    print('\n')
 
     choix_du_tournois = input("Choix du tournois : ")
     test_choix_du_tournois(choix_du_tournois)
@@ -179,7 +182,6 @@ def add_players_to_tournament(tournois):
     except:
         print("Les joueurs n'ont pas été enregistré dans la base de données du tournois")
 
-    print(tournois_table)
 
 def creation_paires():
     """
@@ -393,14 +395,27 @@ def changer_classement_joueurs(tournois):
     nom_prenom = nom_prenom.split(" ")
 
     try:
-        player = players_table.search((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1]) & (q.tournois == tournois))
-        print(player)
+        player = players_table.search((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1])
+                                      & (q.tournois == tournois))[0]
+        print("""
+            Nom : {}
+            Prénom : {}
+            classement : {}        
+        """.format(player['nom'],player['prenom'], player['classement']))
+
         nouveau_classement = input('Entre le nouveau classement : ')
         champ_vide(nouveau_classement)
         nouveau_classement = classement_verification(nouveau_classement)
-        players_table.update({'classement': nouveau_classement}, ((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1]) & (q.tournois == tournois)))
-        player = players_table.search((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1]) & (q.tournois == tournois))
-        print(player)
+        players_table.update({'classement': nouveau_classement}, ((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1])
+                                                                  & (q.tournois == tournois)))
+        player = players_table.search((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1])
+                                      & (q.tournois == tournois))[0]
+        print("""   
+            Le classement a été mis à jour :
+            Nom : {}
+            Prénom : {}
+            classement : {}        
+        """.format(player['nom'], player['prenom'], player['classement']))
     except:
         print("La personne n'existe pas dans la base de données.")
 

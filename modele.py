@@ -115,5 +115,6 @@ def creation_joueurs(tournois):
             'liste joueurs affrontes':player.joueurs_affrontes
         }
         players_table.insert(serialized_player)
-
+    print('\n')
+    print('la liste des joueurs a bien été créé.')
 
