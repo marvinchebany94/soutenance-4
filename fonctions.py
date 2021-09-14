@@ -266,8 +266,8 @@ def matchs(tournois, paires):
         joueur_1 = paire[0]
         joueur_2 = paire[1]
 
-        score_j1 = update_points_joueurs(joueur_1, score_1)
-        score_j2 = update_points_joueurs(joueur_2, score_2)
+        score_j1 = update_points_joueurs(joueur_1, tournois, score_1)
+        score_j2 = update_points_joueurs(joueur_2, tournois, score_2)
 
         j1 = joueur_1.split()
         j2 = joueur_2.split()
@@ -371,7 +371,7 @@ def creation_tour(tournois,liste_matchs):
                     {}
                 """.format(tour.nom, tours_table))
 
-def changer_classement_joueurs():
+def changer_classement_joueurs(tournois):
     """
     La fonction va montrer la liste de tous les joueurs présents dans la base de données, puis demander à l'utilisateur
     d'en choisir un.
@@ -393,18 +393,18 @@ def changer_classement_joueurs():
     nom_prenom = nom_prenom.split(" ")
 
     try:
-        player = players_table.search((q.prenom == nom_prenom[1]) & (q.nom == nom_prenom[0]))
+        player = players_table.search((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1]) & (q.tournois == tournois))
         print(player)
         nouveau_classement = input('Entre le nouveau classement : ')
         champ_vide(nouveau_classement)
         nouveau_classement = classement_verification(nouveau_classement)
-        players_table.update({'classement': nouveau_classement}, (q.prenom == nom_prenom[1] and q.nom == nom_prenom[0]))
-        player = players_table.search((q.prenom == nom_prenom[1]) & (q.nom == nom_prenom[0]))
+        players_table.update({'classement': nouveau_classement}, ((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1]) & (q.tournois == tournois)))
+        player = players_table.search((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1]) & (q.tournois == tournois))
         print(player)
     except:
         print("La personne n'existe pas dans la base de données.")
 
-def update_points_joueurs(joueur, point_a_ajouter):
+def update_points_joueurs(joueur, tournois, point_a_ajouter):
     """
     la fonction va chercher la colonne d'un joueur dans la table des Joueurs.
     Elle va additioner les points actuels avec les points à ajouter.
@@ -419,11 +419,12 @@ def update_points_joueurs(joueur, point_a_ajouter):
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')
     q = Query()
-    query_player = players_table.search((q.nom == nom) and (q.prenom == prenom))[0]
+    query_player = players_table.search((q.nom == nom) & (q.prenom == prenom) & (q.tournois == tournois))[0]
     points_actuels = query_player['points']
     points_finaux = points_actuels + point_a_ajouter
-    player_updating = players_table.update({'points':points_finaux}, (q.nom == nom and q.prenom == prenom))
-    query_player = players_table.search((q.nom == nom) and (q.prenom == prenom))[0]
+    player_updating = players_table.update({'points':points_finaux}, ((q.nom == nom) & (q.prenom == prenom) &
+                                                                      (q.tournois == tournois)))
+    query_player = players_table.search((q.nom == nom) & (q.prenom == prenom) & (q.tournois == tournois))[0]
 
     return query_player['points']
 
@@ -683,12 +684,13 @@ def creating_paires(tournois, liste_joueurs):
     paire_3 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
     print('paire 3 : ', paire_3[1])
     nouvelle_liste = paire_3[0]
+    print(nouvelle_liste)
 
+    #paire_4 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
+    paire_4 = [nouvelle_liste[0], nouvelle_liste[1]]
+    print('paire 4 : ', paire_4)
 
-    paire_4 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
-    print('paire 4 : ', paire_4[1])
-
-    return paire_1[1], paire_2[1], paire_3[1], paire_4[1]
+    return paire_1[1], paire_2[1], paire_3[1], paire_4#[1]
 
 def nombre_de_tours(tournois):
     """
@@ -703,4 +705,5 @@ def nombre_de_tours(tournois):
     resultat = len(table_recherche) + 1
     return resultat
 
-
+db = TinyDB('db.json')
+tournois_table = db.table('Tournois')

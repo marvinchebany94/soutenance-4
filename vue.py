@@ -14,9 +14,6 @@ LISTE_COMMANDES_POUR_LES_TOURNOIS = ["créer une liste de joueurs(1)", "créer u
  d'un joueur(3)", "afficher la liste des acteurs : par ordre alphabétique(4) / par classement(5)", "afficher la\
  liste de tous les tours(6)", "affichier la liste de tous les matchs(7)", "q pour quitter"]
 
-LISTE_COMMANDES_GENERALES = " | ".join(LISTE_COMMANDES_GENERALES)
-LISTE_COMMANDES_POUR_LES_TOURNOIS = " | ".join(LISTE_COMMANDES_POUR_LES_TOURNOIS)
-
 
 def main():
     print("""
@@ -31,7 +28,9 @@ def main():
         ----- Menu principal -----
         """)
 
-        print(LISTE_COMMANDES_GENERALES)
+        for item in LISTE_COMMANDES_GENERALES:
+            print(item)
+        print('\n')
         commandes = input('Entrez votre commande : ')
         cmd = commandes_verifications(liste_commandes_generales, commandes)
 
@@ -78,7 +77,9 @@ def main():
                 print("""
                       -----------TOURNOIS ' {} '-----------
                 """.format(tournois))
-                print(LISTE_COMMANDES_POUR_LES_TOURNOIS)
+                for item in LISTE_COMMANDES_POUR_LES_TOURNOIS:
+                    print(item)
+                print('\n')
                 cmd = input('Entrez votre commande : ')
                 commande = commandes_verifications(liste_commandes_pour_les_tournois, cmd)
                 if commande == "q":
@@ -100,6 +101,7 @@ def main():
                         VOUS NE POUVEZ PLUS CREER DE TOURS, LE TOURNOIS EST TERMINE.
                         VEUILLEZ INDIQUER UN NOUVEAU CLASSEMENT POUR CHAQUE JOUEURS.
                         """)
+                        sys.exit()
                     if numero_tour == 1:
                         paires = creation_paires()
                         liste_des_matchs = matchs(tournois, paires)
@@ -116,7 +118,7 @@ def main():
                         liste_des_matchs = matchs(tournois, all_paires)
                         creation_tour(tournois, liste_des_matchs)
                 if commande == "3":
-                    changer_classement_joueurs()
+                    changer_classement_joueurs(tournois)
                 if commande == "4":
                     print("""
                     ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR ODRE ALPHABETIQUE : ~            
