@@ -50,7 +50,8 @@ def verification_controle_du_temps(reponse):
         i = liste_manieres_de_jouer.index(reponse)
         return liste_manieres_de_jouer[i]
     except ValueError:
-        return "Ton choix n'est pas dans la liste de choix indiqués."
+        print("Ton choix n'est pas dans la liste de choix indiqués.")
+        sys.exit()
 
 
 def sexe_verification(reponse):

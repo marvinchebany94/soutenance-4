@@ -62,6 +62,7 @@ def creation_tournois():
 
     db = TinyDB('db.json')
     tournois_table = db.table('Tournois')
+    q = Query()
     serialized_tournois = {
         'nom':tournois.nom,
         'lieu':tournois.lieu,
@@ -74,11 +75,20 @@ def creation_tournois():
         'date de creation':tournois.date_de_creation
         }
     tournois_table.insert(serialized_tournois)
-    tournois_table = tournois_table.search(where('nom') == tournois.nom)
-
-    print(tournois_table)
-
     print("Le tournois a bien été créé et enregistré.")
+
+    tournois_table = tournois_table.search(q.nom == tournois.nom)[0]
+
+    print("""
+        Tournois : {}
+        Lieu : {}
+        Date : {}
+        Contrôle du temps : {}
+        Description : {}
+    """.format(tournois_table['nom'], tournois_table['lieu'], tournois_table['date'], tournois_table['contrôle du temps'],
+        tournois_table['description']))
+
+
 
 def choix_du_tournois():
     """
@@ -175,7 +185,7 @@ def add_players_to_tournament(tournois):
     tournois_table = db.table('Tournois')
     q = Query()
     tournois_find = tournois_table.search(q.nom == tournois)[0]
-    liste_des_joueurs = liste_joueurs()
+    liste_des_joueurs = liste_joueurs(tournois)
 
     try:
         tournois_table.update({'liste des joueurs':liste_des_joueurs}, q.nom == tournois)
@@ -284,7 +294,7 @@ def matchs(tournois, paires):
         liste_matchs.append(tuple)
 
     #matchs_table.truncate()
-    for m in liste_matchs:
+    for m in liste_matchs[0:4]:
         tuple_match = Matchs(paire=m, tournois=tournois)
 
         match_serialized = {
@@ -293,8 +303,9 @@ def matchs(tournois, paires):
         }
         matchs_table.insert(match_serialized)
 
+    i = 0
     for match in matchs_table.all()[-4:len(matchs_table)]:
-
+        i += 1
         liste_matchs.append(match)
         joueur_1 = match['paire'][0][0]
         joueur_2 = match['paire'][1][0]
@@ -306,13 +317,13 @@ def matchs(tournois, paires):
         else:
             vainqueur = joueur_2
         print("""
-            match :
+            match {} :
                 {} vs {}
             Vainqueur :
                 {}
-        """.format(joueur_1, joueur_2, vainqueur))
+        """.format(i, joueur_1, joueur_2, vainqueur))
 
-    return liste_matchs
+    return liste_matchs[0:4]
 
 def creation_tour(tournois,liste_matchs):
     """
@@ -348,9 +359,8 @@ def creation_tour(tournois,liste_matchs):
         tours_table.insert(tour_serialized)
         tours_table = tours_table.search(where('tournois') == tournois)[-1]
         print("""
-            Le {} a bien été enregistré :
-            {}
-        """.format(tour.nom, tours_table))
+            Le {} a bien été enregistré.
+        """.format(tour.nom, ))
     else:
         find_last_round = tours_table.search(q.tournois == tournois)[-1]
         round_number = int(find_last_round['nom'][-1])
@@ -369,9 +379,8 @@ def creation_tour(tournois,liste_matchs):
         tours_table.insert(tour_serialized)
         tours_table = tours_table.search(where('tournois') == tournois)[-1]
         print("""
-                    Le {} a bien été enregistré :
-                    {}
-                """.format(tour.nom, tours_table))
+            Le {} a bien été enregistré.   
+        """.format(tour.nom))
 
 def changer_classement_joueurs(tournois):
     """
@@ -386,7 +395,7 @@ def changer_classement_joueurs(tournois):
     players_table = db.table("Joueurs")
     q = Query()
 
-    liste_des_joueurs = liste_joueurs()
+    liste_des_joueurs = liste_joueurs(tournois)
     print("""
         Voici la liste des joueurs dans la base de données :
         {}
@@ -400,7 +409,7 @@ def changer_classement_joueurs(tournois):
         print("""
             Nom : {}
             Prénom : {}
-            classement : {}        
+            classement : {}
         """.format(player['nom'],player['prenom'], player['classement']))
 
         nouveau_classement = input('Entre le nouveau classement : ')
@@ -414,7 +423,7 @@ def changer_classement_joueurs(tournois):
             Le classement a été mis à jour :
             Nom : {}
             Prénom : {}
-            classement : {}        
+            Nouveau classement : {}        
         """.format(player['nom'], player['prenom'], player['classement']))
     except:
         print("La personne n'existe pas dans la base de données.")
@@ -461,6 +470,18 @@ def search_classement(nom_prenom):
     classement = player['classement']
     return [nom_prenom, classement]
 
+def search_classement_by_id(id):
+
+    db = TinyDB('db.json')
+    players = db.table('Joueurs')
+    q = Query()
+    player = players.search(q.id == id)[0]
+    classement = player['classement']
+
+
+    return classement
+
+
 def search_player_by_classement(classement):
     """
     la fonction va chercher le nom et prénom d'une personne en fonction du classement passé en paramétre
@@ -476,16 +497,25 @@ def search_player_by_classement(classement):
 
     return player_identite
 
-def liste_acteurs_odre_de_classement(liste_joueurs):
+
+def search_id_by_classement(classement):
+    db = TinyDB('db.json')
+    players = db.table('Joueurs')
+    q = Query()
+    player = players.search(q.classement == classement)[0]
+    id = player['id']
+    return id
+
+def liste_acteurs_odre_de_classement(id):
     """
     La fonction retourne la liste des acteurs par ordre de classement.
     :param liste_joueurs: liste des joueurs que l'on veut trier (nom prénom)
     :return: la liste triée par ordre de classement
     """
     liste_classement_joueur = []
-    for player in liste_joueurs:
-        classement = search_classement(player)
-        liste_classement_joueur.append(classement[1])
+    for i in id:
+        classement = search_classement_by_id(i)
+        liste_classement_joueur.append(classement)
 
     liste_joueur_ordre_croissant = sorted(liste_classement_joueur)
     liste_acteurs_odre_de_classement = []
@@ -507,7 +537,9 @@ def liste_matchs_d_un_tournois(tournois):
     q = Query()
     all_matchs = matchs_table.search(q.tournois == tournois)
     liste_matchs = []
+    i = 0
     for match in all_matchs:
+        i += 1
         liste_matchs.append(match)
         joueur_1 = match['paire'][0][0]
         joueur_2 = match['paire'][1][0]
@@ -519,11 +551,11 @@ def liste_matchs_d_un_tournois(tournois):
         else:
             vainqueur = joueur_2
         print("""
-            match :
+            match {} :
                 {} vs {}
             Vainqueur :
                 {}
-        """.format(joueur_1, joueur_2, vainqueur))
+        """.format(i, joueur_1, joueur_2, vainqueur))
     return liste_matchs
 
 def liste_tours_d_un_tournois(tournois):
@@ -537,7 +569,12 @@ def liste_tours_d_un_tournois(tournois):
     q = Query()
     all_tours = tours_table.search(q.tournois == tournois)
     for tour in all_tours:
-        print(tour)
+        print("""
+            {} :
+            Début : {}
+            Fin : {}
+            Liste des matchs : {} 
+        """.format(tour['nom'], tour['debut'], tour['fin'], tour['match']))
         print('\n')
 
 def liste_triee(liste_joueurs):
@@ -687,23 +724,17 @@ def creating_paires(tournois, liste_joueurs):
     """
 
     paire_1 = etape_3_4_systeme_suisse(liste_joueurs, tournois)
-    print('paire 1 : ', paire_1[1])
     nouvelle_liste = paire_1[0]
 
 
     paire_2 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
-    print('paire 2 : ',paire_2[1])
     nouvelle_liste = paire_2[0]
 
 
     paire_3 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
-    print('paire 3 : ', paire_3[1])
     nouvelle_liste = paire_3[0]
-    print(nouvelle_liste)
 
-    #paire_4 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
     paire_4 = [nouvelle_liste[0], nouvelle_liste[1]]
-    print('paire 4 : ', paire_4)
 
     return paire_1[1], paire_2[1], paire_3[1], paire_4#[1]
 
@@ -721,4 +752,16 @@ def nombre_de_tours(tournois):
     return resultat
 
 db = TinyDB('db.json')
-tournois_table = db.table('Tournois')
+tournois_table = db.table('Joueurs')
+q = Query()
+x = tournois_table.search(q.id == 5)
+print(x)
+
+#tournois_table.truncate()
+print(search_id_by_classement(153))
+
+
+"""
+Améliorer la fonction qui permet de modifier le classement d'un jour pour qu'elle vérifie si qqn a déjà ce classement
+ou non
+"""
