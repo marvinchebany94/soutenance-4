@@ -95,29 +95,67 @@ def liste_joueurs(tournois):
             liste_joueurs.append(nom_prenom)
     return liste_joueurs
 
-def liste_acteurs_odre_alphabetique(liste_joueurs, tournois):
+def liste_acteurs_odre_alphabetique(liste_id, tournois):
     """
     La fonction retourne la liste des joueurs par ordre alphabétique.
-    :param liste_joueurs: la liste des joueurs que l'on souhaite trier
+    :param liste_joueurs: la liste des joueurs que l'on souhaite trier via leur id
     :param tournois: Le tournois pour lequel on trira la liste des joueurs
     :return: un print qui retourne la liste "liste_joueur_ordre_alphabetique" qui contient la liste trièe avec le nom
     et prénom de chaque joueurs.
     """
+    db = TinyDB('db.json')
+    players_table = db.table('Joueurs')
+    q = Query()
+    liste_triee = []
+    joueur_deja_print = []
     if tournois == "":
-        liste_joueur_ordre_alphabetique = sorted(liste_joueurs)
-        print(liste_joueur_ordre_alphabetique)
-    else:
-        liste_joueurs = []
-        db = TinyDB('db.json')
-        players_table = db.table('Joueurs')
-        q = Query()
-        players = players_table.search(q.tournois == tournois)
-
-        for player in players:
+        for id in liste_id:
+            player = players_table.search(q.id == id)[0]
             nom_prenom = player['nom'] + " " + player['prenom']
-            liste_joueurs.append(nom_prenom)
-        liste_joueur_odre_alphabetique = sorted(liste_joueurs)
-        print(liste_joueur_odre_alphabetique)
+            liste_triee.append(nom_prenom)
+
+        liste_joueur_ordre_alphabetique = sorted(liste_triee)
+        for player in liste_joueur_ordre_alphabetique:
+            player = player.split()
+            p_found = players_table.search(q.nom == player[0] and q.prenom == player[1])
+
+            for p in p_found:
+                nom = p['nom']
+                prenom = p ['prenom']
+                nom_prenom = nom + " " + prenom
+                classement = p['classement']
+                tuple = (nom_prenom, classement)
+                if tuple not in joueur_deja_print:
+                    joueur_deja_print.append(tuple)
+                    print("""
+                        Nom : {}
+                        Prénom : {}
+                        Classement : {}
+                    """.format(nom, prenom, classement))
+                else:
+                    continue
+
+    else:
+        for id in liste_id:
+            player = players_table.search(q.id == id)[0]
+            nom_prenom = player['nom'] + " " + player['prenom']
+            liste_triee.append(nom_prenom)
+
+        liste_joueur_odre_alphabetique = sorted(liste_triee)
+        for player in liste_joueur_odre_alphabetique:
+            player = player.split()
+            p = players_table.search((q.nom == player[0]) & (q.prenom == player[1]) & (q.tournois == tournois))[0]
+            nom = p['nom']
+            prenom = p['prenom']
+            nom_prenom = nom + " " + prenom
+            classement = p['classement']
+            tournois = p['tournois']
+            print("""
+                Nom : {}
+                Prénom : {}
+                Classement : {}
+                Tournois : {}
+            """.format(nom, prenom, classement, tournois))
 
 
 def id_auto_increment():
@@ -190,4 +228,4 @@ def search_classement_by_id(id):
     classement = player['classement']
     return classement
 
-print(search_classement_by_id(2))
+

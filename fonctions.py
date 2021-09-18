@@ -53,8 +53,7 @@ def creation_tournois():
 
     description = input("Si vous voulez ajouter une description au tournois : ")
 
-    date = time_now()
-    date_de_creation = date
+    date_creation = time_now()
 
     tournois = Tournois(nom=nom, lieu=lieu, date=date, nombre_de_tours=4, tournees=None,
                         controle_du_temps=controle_du_temps, liste_des_joueurs=None, description=description,
@@ -499,6 +498,12 @@ def search_player_by_classement(classement):
 
 
 def search_id_by_classement(classement):
+    """
+    La fonction sert à rechercher l'id
+
+    :param classement:
+    :return:
+    """
     db = TinyDB('db.json')
     players = db.table('Joueurs')
     q = Query()
@@ -521,6 +526,20 @@ def liste_acteurs_odre_de_classement(id):
     liste_acteurs_odre_de_classement = []
     for classement in liste_joueur_ordre_croissant:
         joueur = search_player_by_classement(classement)
+        db = TinyDB('db.json')
+        players = db.table('Joueurs')
+        q = Query()
+        player = players.search(q.classement == classement)[0]
+        nom = player['nom']
+        prenom = player['prenom']
+        classement = player['classement']
+        tournois = player['tournois']
+        print("""
+            Nom : {}
+            Prénom : {}
+            Classement : {}
+            Tournois : {}
+        """.format(nom, prenom, classement, tournois))
         liste_acteurs_odre_de_classement.append(joueur)
 
     return liste_acteurs_odre_de_classement
@@ -754,11 +773,11 @@ def nombre_de_tours(tournois):
 db = TinyDB('db.json')
 tournois_table = db.table('Joueurs')
 q = Query()
-x = tournois_table.search(q.id == 5)
-print(x)
+
+print(tournois_table.all())
 
 #tournois_table.truncate()
-print(search_id_by_classement(153))
+
 
 
 """

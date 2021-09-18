@@ -57,15 +57,15 @@ def main():
             print("""
             ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR ODRE ALPHABETIQUE : ~            
             """)
-            liste_des_joueurs = liste_joueurs("")
-            liste_acteurs_odre_alphabetique(liste_des_joueurs, "")
+            liste_des_id = liste_id_for_each_players("")
+            liste_acteurs_odre_alphabetique(liste_des_id, "")
 
         if cmd == "4":
             print("""
             ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR ODRE DE CLASSEMENT : ~            
             """)
             liste_des_joueurs = liste_id_for_each_players("")
-            print(liste_acteurs_odre_de_classement(liste_des_joueurs))
+            liste_acteurs_odre_de_classement(liste_des_joueurs)
 
         if cmd == "5":
             print("""
@@ -124,14 +124,14 @@ def main():
                     print("""
                     ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR ODRE ALPHABETIQUE : ~            
                     """)
-                    liste_des_joueurs = liste_joueurs(tournois)
-                    liste_acteurs_odre_alphabetique(liste_des_joueurs, tournois)
+                    liste_des_id = liste_id_for_each_players(tournois)
+                    liste_acteurs_odre_alphabetique(liste_des_id, tournois)
                 if commande == "5":
                     print("""
                         ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR ODRE DE CLASSEMENT : ~            
                     """)
-                    liste_des_joueurs = liste_joueurs(tournois)
-                    print(liste_acteurs_odre_de_classement(liste_des_joueurs))
+                    liste_des_id = liste_id_for_each_players(tournois)
+                    liste_acteurs_odre_de_classement(liste_des_id)
                 if commande == "6":
                     print("""                   
                         VOUS ALLEZ VOIR LA LISTE DE TOURS LES TOURS DU TOURNOIS :        
