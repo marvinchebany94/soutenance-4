@@ -1,10 +1,12 @@
-import sys, datetime
+import sys
+import datetime
 from modele import liste_des_tournois
+
 
 def champ_vide(champ_a_tester):
     if len(champ_a_tester) == 0:
         print("Le champ est mal rempli.")
-        sys.exit()
+        return champ_a_tester
     else:
         return champ_a_tester
 
@@ -14,30 +16,34 @@ def date_verification(j, m, a):
         print("La date est invalide")
     else:
         try:
-            date = datetime.datetime(a,m,j)
+            datetime.datetime(a, m, j)
             return True
         except ValueError:
             print("La date n'est pas valide.")
             return False
 
+
 def verification_tournois_already_exists(nom_du_tournois):
     liste_tournois = liste_des_tournois()
-    if nom_du_tournois in liste_tournois: #chercher une fonction pour chercher plus rapidement
+    if nom_du_tournois in liste_tournois:
         print("""
             Le tournois que vous voulez créer existe déjà dans la base de donnée.
              Veuillez trouver un autre nom pour celui-ci.       
             """)
-        sys.exit()
+        return True
     else:
-        pass
+        return False
+
 
 def test_choix_du_tournois(reponse):
     liste_tournois = liste_des_tournois()
     if reponse not in liste_tournois:
         print("Tu n'as pas choisis un tournois figurant dans la liste.")
-        sys.exit()
+        return False
     else:
+        return True
         pass
+
 
 def verification_controle_du_temps(reponse):
     liste_manieres_de_jouer = ["bullet", "blitz", "coup rapide"]
@@ -45,7 +51,8 @@ def verification_controle_du_temps(reponse):
         i = liste_manieres_de_jouer.index(reponse)
         return liste_manieres_de_jouer[i]
     except ValueError:
-        return "Ton choix n'est pas dans la liste de choix indiqués."
+        print("Ton choix n'est pas dans la liste de choix indiqués.")
+        return False
 
 
 def sexe_verification(reponse):
@@ -70,6 +77,7 @@ def classement_verification(classement):
         classement_verification(classement)
         break
     return int(classement)
+
 
 def commandes_verifications(liste, commande):
     try:
