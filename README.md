@@ -32,5 +32,30 @@ Il est maintenant temps d'installer les modules nécéssaires au bon fonctionnem
 
 python -m pip install -r requirements.txt
 
+Vous pouvez maintenant lancer le script sans avoir de problèmes au niveau des modules.
 
+Lancez dans l'invite de commandes : chemin_du_fichier/vue.py
+
+Une fois lancée vous arriverez sur le menu principal qui contient une liste d'actions possibles d'effectuer.
+Chaque action est numérotée. Pour le menu principal on aura 6 commandes :
+créer un tournois, choisir un tournois, afficher la liste des acteurs par ordre alphabétique ou par classement, afficher la liste de tous les tournois, puis quitter l'application.
+
+Si vous entrez 1 :
+La liste de toutes les informations concernant un tournois vous sera demandée. (nom, lieu, date etc..)
+
+Si vous entrez 2 :
+La liste de tous les tournois avec des infos comme le nom, le lieu, la date et le contrôle du temps vous seront affichés.
+Pour choisir le tournois avec lequel vous voudrez intéragir il suffira d'entrer son nom.
+
+Si vous entrez 3:
+Le programme affichera la liste de tous les acteurs par ordre alphabétique en mettant leur nom, prénom et classement.
+
+Si vous entrez 4 :
+Le programme affichera la liste de tous les acteurs par ordre de classement en mettant le nom, prénom et classement.
+
+Si vous entrez 5 :
+le programme affichera la liste de tous les tournois avec leur nom, date, lieu et contrôle du temps.
+
+Si vous entrez q :
+Le programme s'arrête.
 
