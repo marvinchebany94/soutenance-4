@@ -3,7 +3,7 @@ from tinydb import TinyDB
 from fonctions import creation_tournois, creation_liste_joueur, add_players_to_tournament, creation_paires, matchs,\
     changer_classement_joueurs, creation_tour, search_player_by_classement, \
     liste_acteurs_odre_de_classement, liste_matchs_d_un_tournois, liste_tours_d_un_tournois, liste_triee, \
-    choix_du_tournois, etape_3_4_systeme_suisse, creating_paires, nombre_de_tours
+    choix_du_tournois, etape_3_4_systeme_suisse, creating_paires, nombre_de_tours, time_now
 from modele import creation_joueurs, liste_acteurs_odre_alphabetique, liste_joueurs, liste_des_tournois,\
     liste_id_for_each_players
 from verification import commandes_verifications
@@ -65,13 +65,13 @@ def main():
             ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR ODRE DE CLASSEMENT : ~            
             """)
             liste_des_joueurs = liste_id_for_each_players("")
-            liste_acteurs_odre_de_classement(liste_des_joueurs)
+            liste_acteurs_odre_de_classement(liste_des_joueurs, True)
 
         if cmd == "5":
             print("""
             ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES TOURNOIS : ~            
             """)
-            liste_des_tournois()
+            liste_des_tournois(True)
 
         while cmd == "2":
             while True:
@@ -97,34 +97,36 @@ def main():
                         PROBLEME A REGLER AU NIVEAU DE LA CREATION DES TOURS
                     """
                     numero_tour = nombre_de_tours(tournois)
-                    print("""
-                        VOUS ALLEZ CREER LE TOUR NUMERO {}
-                    """.format(numero_tour))
                     if numero_tour == 5:
                         print("""
                         VOUS NE POUVEZ PLUS CREER DE TOURS, LE TOURNOIS EST TERMINE.
                         VEUILLEZ INDIQUER UN NOUVEAU CLASSEMENT POUR CHAQUE JOUEURS.
                         """)
-                        sys.exit()
+                        changer_classement_joueurs(tournois)
                     if numero_tour == 1:
+                        print("""
+                            VOUS ALLEZ CREER LE TOUR NUMERO {}
+                        """.format(numero_tour))
+                        debut = time_now()
                         id = liste_id_for_each_players(tournois)
                         paires = creation_paires(id)
                         liste_des_matchs = matchs(tournois, paires)
-                        creation_tour(tournois, liste_des_matchs)
+                        creation_tour(tournois, liste_des_matchs, debut)
 
                     else:
+                        print("""
+                            VOUS ALLEZ CREER LE TOUR NUMERO {}
+                        """.format(numero_tour))
+                        debut = time_now()
                         print("""
                             TOUR {} :
                         """.format(numero_tour))
 
                         liste_des_joueurs = liste_joueurs(tournois)
-                        print(liste_des_joueurs)
                         l_triee = liste_triee(liste_des_joueurs, tournois)
-                        print(l_triee)
                         all_paires = creating_paires(tournois, l_triee)
-                        print(all_paires)
                         liste_des_matchs = matchs(tournois, all_paires)
-                        creation_tour(tournois, liste_des_matchs)
+                        creation_tour(tournois, liste_des_matchs, debut)
                 if commande == "3":
                     changer_classement_joueurs(tournois)
                 if commande == "4":
@@ -138,7 +140,7 @@ def main():
                         ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR ODRE DE CLASSEMENT : ~            
                     """)
                     liste_des_id = liste_id_for_each_players(tournois)
-                    liste_acteurs_odre_de_classement(liste_des_id)
+                    liste_acteurs_odre_de_classement(liste_des_id, True)
                 if commande == "6":
                     print("""                   
                         VOUS ALLEZ VOIR LA LISTE DE TOURS LES TOURS DU TOURNOIS :        

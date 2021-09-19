@@ -60,11 +60,11 @@ def creation_tournois():
             continue
         else:
             a = int(a)
-            break
-
-    date = str(j) + "/" + str(m) + "/" + str(a)
-
-    date_verification(j,m,a)
+            date = str(j) + "/" + str(m) + "/" + str(a)
+            if date_verification(j, m, a):
+                break
+            else:
+                continue
 
     while True:
         controle_du_temps = input("Contrôle du temps (bullet, blitz ou coup rapide) : ")
@@ -126,7 +126,7 @@ def choix_du_tournois():
     des actions.
     :return: le tournois que l'utilisateur aura choisi
     """
-    liste_tournois = liste_des_tournois()
+    liste_tournois = liste_des_tournois(True)
 
 
     print("""
@@ -227,6 +227,15 @@ def add_players_to_tournament(tournois):
         print("Les joueurs n'ont pas été enregistré dans la base de données du tournois")
 
 
+
+def search_player_by_id(id):
+    db = TinyDB('db.json')
+    players = db.table('Joueurs')
+    q = Query()
+    player = players.search(q.id == id)[0]
+    nom_prenom = player['nom'] + " " + player['prenom']
+    return nom_prenom
+
 def creation_paires(id):
     """
     la fonction va créer 2 listes, les 4 meilleurs joueurs et les 4 moins bons.
@@ -239,7 +248,7 @@ def creation_paires(id):
     :return: La liste contenant les 4 paires pour le premier tour
     """
 
-    liste_ordre_classement = liste_acteurs_odre_de_classement(id)
+    liste_ordre_classement = liste_acteurs_odre_de_classement(id, False)
     #on crée les 2 groupes
     premier_groupe = liste_ordre_classement[0:4]
 
@@ -251,6 +260,21 @@ def creation_paires(id):
     paire_2 = (premier_groupe[1], deuxieme_groupe[1])
     paire_3 = (premier_groupe[2], deuxieme_groupe[2])
     paire_4 = (premier_groupe[3], deuxieme_groupe[3])
+
+    print("""
+        Liste des matchs pour le tour 1 :
+        
+            {} vs {}
+            
+            {} vs {}
+            
+            {} vs {}
+            
+            {} vs {}
+    """.format(search_player_by_id(paire_1[0]), search_player_by_id(paire_1[1]),
+            search_player_by_id(paire_2[0]), search_player_by_id(paire_2[1]),
+            search_player_by_id(paire_3[0]), search_player_by_id(paire_3[1]),
+            search_player_by_id(paire_4[0]), search_player_by_id(paire_4[1])))
 
     #on retourne la liste des 4 paires
     return [paire_1, paire_2, paire_3, paire_4]
@@ -277,18 +301,43 @@ def matchs(tournois, paires):
     players_table = db.table('Joueurs')
 
     for paire in paires:
-        score_1 = random.choice([0,0.5,1])
-        if score_1 == 0:
-            score_2 = 1
-        if score_1 == 1:
-            score_2 = 0
-        if score_1 == 0.5:
-            score_2 = 0.5
 
         joueur_1 = players_table.search(q.id == paire[0])[0]
         joueur_1 = joueur_1['nom'] + " " + joueur_1['prenom']
         joueur_2 = players_table.search(q.id == paire[1])[0]
         joueur_2 = joueur_2['nom'] + " " + joueur_2['prenom']
+
+        print("""
+                 Match : 
+                  {} vs {}   
+        """.format(joueur_1, joueur_2))
+
+        while True:
+            scores = [0,0.5,1]
+            score_1 = input("Veuillez entrer le score du joueur à gauche :")
+            if score_1 == "":
+                continue
+            else:
+                if score_1 == "1" or score_1 == "0":
+                    score_1 = int(score_1)
+                else:
+                    score_1 = float(score_1)
+                if score_1 not in scores:
+                    print("Le score indiqué n'est pas bon.")
+                    continue
+                else:
+                    if score_1 == 0:
+                        score_2 = 1
+                        score_2 = int(score_2)
+                        break
+                    if score_1 == 1:
+                        score_2 = 0
+                        score_2 = int(score_2)
+                        break
+                    if score_1 == 0.5:
+                        score_2 = 0.5
+                        score_2 = float(score_2)
+                        break
 
         score_j1 = update_points_joueurs(joueur_1, tournois, score_1)
         score_j2 = update_points_joueurs(joueur_2, tournois, score_2)
@@ -334,7 +383,7 @@ def matchs(tournois, paires):
 
     return liste_matchs[0:4]
 
-def creation_tour(tournois,liste_matchs):
+def creation_tour(tournois,liste_matchs, debut):
     """
     La fonction vérifie l'existence d'un tour pour un tournois donné. Si aucun tour n'est renvoyé la fonction va créer
     le premier tour.
@@ -356,7 +405,7 @@ def creation_tour(tournois,liste_matchs):
     #si le résultat est vide on crée le round 1 :
     if not resultat:
         fin = time_now()
-        tour = Tours(nom='Round 1', debut=None, fin=fin, match=liste_matchs, tournois=tournois)
+        tour = Tours(nom='Round 1', debut=debut, fin=fin, match=liste_matchs, tournois=tournois)
         tour_serialized = {
             'nom':tour.nom,
             'debut':tour.debut,
@@ -376,7 +425,7 @@ def creation_tour(tournois,liste_matchs):
         round_number += 1
         nom = "Round " + str(round_number)
         fin = time_now()
-        tour = Tours(nom=nom, debut=None, fin=fin, match=liste_matchs, tournois=tournois)
+        tour = Tours(nom=nom, debut=debut, fin=fin, match=liste_matchs, tournois=tournois)
         tour_serialized = {
             'nom': tour.nom,
             'debut': tour.debut,
@@ -391,6 +440,17 @@ def creation_tour(tournois,liste_matchs):
             Le {} a bien été enregistré.   
         """.format(tour.nom))
 
+def classement_deja_pris(classement):
+    db = TinyDB('db.json')
+    joueurs = db.table('Joueurs')
+    q = Query()
+    joueur = joueurs.search(q.classement == classement)
+    if len(joueur) == 1:
+        return True
+    else:
+        return False
+
+
 def changer_classement_joueurs(tournois):
     """
     La fonction va montrer la liste de tous les joueurs présents dans la base de données, puis demander à l'utilisateur
@@ -404,11 +464,11 @@ def changer_classement_joueurs(tournois):
     players_table = db.table("Joueurs")
     q = Query()
 
-    liste_des_joueurs = liste_joueurs(tournois)
-    print("""
-        Voici la liste des joueurs dans la base de données :
-        {}
-    """.format(liste_des_joueurs))
+    print("Voici la liste des joueurs dans le tournois ' {} '  :".format(tournois))
+    for joueur in liste_joueurs(tournois):
+        print('- ', joueur)
+    print('\n')
+
     nom_prenom = input("Choisissez la personne à qui vous voulez modifier le classement : ")
     nom_prenom = nom_prenom.split(" ")
 
@@ -424,16 +484,19 @@ def changer_classement_joueurs(tournois):
         nouveau_classement = input('Entre le nouveau classement : ')
         champ_vide(nouveau_classement)
         nouveau_classement = classement_verification(nouveau_classement)
+
         players_table.update({'classement': nouveau_classement}, ((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1])
-                                                                  & (q.tournois == tournois)))
+                                                                      & (q.tournois == tournois)))
         player = players_table.search((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1])
-                                      & (q.tournois == tournois))[0]
+                                          & (q.tournois == tournois))[0]
         print("""   
             Le classement a été mis à jour :
             Nom : {}
             Prénom : {}
             Nouveau classement : {}        
         """.format(player['nom'], player['prenom'], player['classement']))
+
+
     except:
         print("La personne n'existe pas dans la base de données.")
 
@@ -504,7 +567,7 @@ def search_id_by_classement(classement):
     id = player['id']
     return id
 
-def liste_acteurs_odre_de_classement(id):
+def liste_acteurs_odre_de_classement(id, show_liste):
     """
     La fonction retourne la liste des acteurs par ordre de classement.
     :param liste_joueurs: liste des joueurs que l'on veut trier (nom prénom)
@@ -524,17 +587,20 @@ def liste_acteurs_odre_de_classement(id):
         q = Query()
         player = players.search(q.classement == classement)[0]
         id = player['id']
-        nom = player['nom']
-        prenom = player['prenom']
-        nom_prenom = nom + " " + prenom
-        classement = player['classement']
-        tournois = player['tournois']
-        print("""
-            Nom : {}
-            Prénom : {}
-            Classement : {}
-            Tournois : {}
-        """.format(nom, prenom, classement, tournois))
+        if show_liste == True:
+            nom = player['nom']
+            prenom = player['prenom']
+            nom_prenom = nom + " " + prenom
+            classement = player['classement']
+            tournois = player['tournois']
+            print("""
+                Nom : {}
+                Prénom : {}
+                Classement : {}
+                Tournois : {}
+            """.format(nom, prenom, classement, tournois))
+        else:
+            pass
         liste_acteurs_odre_de_classement.append(id)
 
     return liste_acteurs_odre_de_classement
@@ -582,13 +648,31 @@ def liste_tours_d_un_tournois(tournois):
     tours_table = db.table('Tours')
     q = Query()
     all_tours = tours_table.search(q.tournois == tournois)
+    i = 0
     for tour in all_tours:
         print("""
             {} :
             Début : {}
             Fin : {}
-            Liste des matchs : {} 
-        """.format(tour['nom'], tour['debut'], tour['fin'], tour['match']))
+        """.format(tour['nom'], tour['debut'], tour['fin']))
+
+        for match in tour['match']:
+            i += 1
+            joueur_1 = match[0][0]
+            joueur_2 = match[1][0]
+            score_1 = match[0][1]
+            if score_1 == 1:
+                vainqueur = joueur_1
+            elif score_1 == 0.5:
+                vainqueur = 'match nul'
+            else:
+                vainqueur = joueur_2
+            print("""
+                    match {} :
+                        {} vs {}
+                    Vainqueur :
+                        {}
+                    """.format(i, joueur_1, joueur_2, vainqueur))
         print('\n')
 
 def liste_triee(liste_joueurs, tournois):
@@ -650,7 +734,7 @@ def liste_triee(liste_joueurs, tournois):
         elif len(l) == 0:
             pass
         else:
-            liste_ordre_croissant = liste_acteurs_odre_de_classement(l)
+            liste_ordre_croissant = liste_acteurs_odre_de_classement(l, False)
             liste_triee += liste_ordre_croissant
 
     return liste_triee
@@ -746,6 +830,21 @@ def creating_paires(tournois, liste_joueurs):
     nouvelle_liste = paire_3[0]
 
     paire_4 = [nouvelle_liste[0], nouvelle_liste[1]]
+
+    print("""
+        Liste des matchs pour le tour 1 :
+
+            {} vs {}
+
+            {} vs {}
+
+            {} vs {}
+
+            {} vs {}
+    """.format(search_player_by_id(paire_1[1][0]), search_player_by_id(paire_1[1][1]),
+                   search_player_by_id(paire_2[1][0]), search_player_by_id(paire_2[1][1]),
+                   search_player_by_id(paire_3[1][0]), search_player_by_id(paire_3[1][1]),
+                   search_player_by_id(paire_4[0]), search_player_by_id(paire_4[1])))
 
     return paire_1[1], paire_2[1], paire_3[1], paire_4#[1]
 
