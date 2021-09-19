@@ -52,7 +52,7 @@ class Matchs:
         self.tournois = tournois
 
 
-def liste_des_tournois():
+def liste_des_tournois(voir_la_liste):
     """
     La fonction retourne la liste de tous les tournois présents dans la base de données
     :return: liste_tournois qui est une liste contenant le nom de tous les tournois
@@ -67,12 +67,15 @@ def liste_des_tournois():
         date = tournois['date']
         ville = tournois['lieu']
         controle_du_temps = tournois['contrôle du temps']
-        print("""
-            tournois : {}
-            date : {}
-            lieu : {}
-            contrôle du temps : {}
-        """.format(nom, date, ville, controle_du_temps))
+        if voir_la_liste:
+            print("""
+                tournois : {}
+                date : {}
+                lieu : {}
+                contrôle du temps : {}
+            """.format(nom, date, ville, controle_du_temps))
+        else:
+            pass
         liste_tournois.append(tournois['nom'])
     return liste_tournois
 

@@ -65,13 +65,13 @@ def main():
             ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR ODRE DE CLASSEMENT : ~            
             """)
             liste_des_joueurs = liste_id_for_each_players("")
-            liste_acteurs_odre_de_classement(liste_des_joueurs)
+            liste_acteurs_odre_de_classement(liste_des_joueurs, True)
 
         if cmd == "5":
             print("""
             ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES TOURNOIS : ~            
             """)
-            liste_des_tournois()
+            liste_des_tournois(True)
 
         while cmd == "2":
             while True:
@@ -118,11 +118,8 @@ def main():
                         """.format(numero_tour))
 
                         liste_des_joueurs = liste_joueurs(tournois)
-                        print(liste_des_joueurs)
                         l_triee = liste_triee(liste_des_joueurs, tournois)
-                        print(l_triee)
                         all_paires = creating_paires(tournois, l_triee)
-                        print(all_paires)
                         liste_des_matchs = matchs(tournois, all_paires)
                         creation_tour(tournois, liste_des_matchs)
                 if commande == "3":
@@ -138,7 +135,7 @@ def main():
                         ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR ODRE DE CLASSEMENT : ~            
                     """)
                     liste_des_id = liste_id_for_each_players(tournois)
-                    liste_acteurs_odre_de_classement(liste_des_id)
+                    liste_acteurs_odre_de_classement(liste_des_id, True)
                 if commande == "6":
                     print("""                   
                         VOUS ALLEZ VOIR LA LISTE DE TOURS LES TOURS DU TOURNOIS :        
