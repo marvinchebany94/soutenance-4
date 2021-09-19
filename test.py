@@ -71,4 +71,13 @@ def marvin():
     marvin = db.search(q.prenom == 'marvin')
     print(marvin)
 
-
+reponse = False
+while reponse != True:
+    i = input(": ")
+    if i == 0:
+        print("mauvaise réponse")
+        continue
+    else:
+        reponse = True
+        break
+print("i : ",i)

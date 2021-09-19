@@ -63,8 +63,19 @@ def liste_des_tournois():
     Tournois_table = Tournois_table.all()
     liste_tournois = []
     for tournois in Tournois_table:
+        nom = tournois['nom']
+        date = tournois['date']
+        ville = tournois['lieu']
+        controle_du_temps = tournois['contrôle du temps']
+        print("""
+            tournois : {}
+            date : {}
+            lieu : {}
+            contrôle du temps : {}
+        """.format(nom, date, ville, controle_du_temps))
         liste_tournois.append(tournois['nom'])
     return liste_tournois
+
 
 def liste_joueurs(tournois):
     """
@@ -95,6 +106,7 @@ def liste_joueurs(tournois):
             liste_joueurs.append(nom_prenom)
     return liste_joueurs
 
+
 def liste_acteurs_odre_alphabetique(liste_id, tournois):
     """
     La fonction retourne la liste des joueurs par ordre alphabétique.
@@ -124,6 +136,7 @@ def liste_acteurs_odre_alphabetique(liste_id, tournois):
                 prenom = p ['prenom']
                 nom_prenom = nom + " " + prenom
                 classement = p['classement']
+                tournois = p['tournois']
                 tuple = (nom_prenom, classement)
                 if tuple not in joueur_deja_print:
                     joueur_deja_print.append(tuple)
@@ -131,7 +144,8 @@ def liste_acteurs_odre_alphabetique(liste_id, tournois):
                         Nom : {}
                         Prénom : {}
                         Classement : {}
-                    """.format(nom, prenom, classement))
+                        Tournois : {}
+                    """.format(nom, prenom, classement, tournois))
                 else:
                     continue
 
@@ -170,6 +184,7 @@ def id_auto_increment():
         id += 1
     return id
 
+
 def creation_joueurs(tournois):
 
     marvin = Joueur("decocq", "marvin", "20/07/98", "m", 1, tournois, 0, [], "")
@@ -202,6 +217,7 @@ def creation_joueurs(tournois):
     print('\n')
     print('la liste des joueurs a bien été créé.')
 
+
 def liste_id_for_each_players(tournois):
     db = TinyDB('db.json')
     players = db.table('Joueurs')
@@ -218,7 +234,7 @@ def liste_id_for_each_players(tournois):
             liste_id.append(id)
     return liste_id
 
-print(liste_id_for_each_players("rocket league"))
+
 def search_classement_by_id(id):
 
     db = TinyDB('db.json')

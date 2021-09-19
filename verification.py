@@ -6,7 +6,7 @@ from modele import liste_des_tournois
 def champ_vide(champ_a_tester):
     if len(champ_a_tester) == 0:
         print("Le champ est mal rempli.")
-        sys.exit()
+        return champ_a_tester
     else:
         return champ_a_tester
 
@@ -30,8 +30,9 @@ def verification_tournois_already_exists(nom_du_tournois):
             Le tournois que vous voulez créer existe déjà dans la base de donnée.
              Veuillez trouver un autre nom pour celui-ci.       
             """)
-        sys.exit()
+        return True
     else:
+        return False
         pass
 
 
@@ -51,7 +52,7 @@ def verification_controle_du_temps(reponse):
         return liste_manieres_de_jouer[i]
     except ValueError:
         print("Ton choix n'est pas dans la liste de choix indiqués.")
-        sys.exit()
+        return False
 
 
 def sexe_verification(reponse):

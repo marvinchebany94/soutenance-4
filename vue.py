@@ -1,7 +1,7 @@
 import sys
 from tinydb import TinyDB
 from fonctions import creation_tournois, creation_liste_joueur, add_players_to_tournament, creation_paires, matchs,\
-    changer_classement_joueurs, creation_tour, search_classement, search_player_by_classement, \
+    changer_classement_joueurs, creation_tour, search_player_by_classement, \
     liste_acteurs_odre_de_classement, liste_matchs_d_un_tournois, liste_tours_d_un_tournois, liste_triee, \
     choix_du_tournois, etape_3_4_systeme_suisse, creating_paires, nombre_de_tours
 from modele import creation_joueurs, liste_acteurs_odre_alphabetique, liste_joueurs, liste_des_tournois,\
@@ -71,7 +71,7 @@ def main():
             print("""
             ~VOUS ALLEZ VOIR LA LISTE DE TOUS LES TOURNOIS : ~            
             """)
-            print(liste_des_tournois())
+            liste_des_tournois()
 
         while cmd == "2":
             while True:
@@ -86,9 +86,12 @@ def main():
                 if commande == "q":
                     break
                 if commande == "1":
-                    creation_joueurs(tournois)
-                    liste_des_joueurs = liste_joueurs(tournois)
-                    add_players_to_tournament(tournois)
+                    if liste_id_for_each_players(tournois) == []:
+                        creation_joueurs(tournois)
+                        liste_des_joueurs = liste_joueurs(tournois)
+                        add_players_to_tournament(tournois)
+                    else:
+                        print('Tu as déjà créé des joueurs pour ce tournois.')
                 if commande == "2":
                     """
                         PROBLEME A REGLER AU NIVEAU DE LA CREATION DES TOURS
@@ -104,7 +107,8 @@ def main():
                         """)
                         sys.exit()
                     if numero_tour == 1:
-                        paires = creation_paires()
+                        id = liste_id_for_each_players(tournois)
+                        paires = creation_paires(id)
                         liste_des_matchs = matchs(tournois, paires)
                         creation_tour(tournois, liste_des_matchs)
 
@@ -114,8 +118,11 @@ def main():
                         """.format(numero_tour))
 
                         liste_des_joueurs = liste_joueurs(tournois)
-                        l_triee = liste_triee(liste_des_joueurs)
+                        print(liste_des_joueurs)
+                        l_triee = liste_triee(liste_des_joueurs, tournois)
+                        print(l_triee)
                         all_paires = creating_paires(tournois, l_triee)
+                        print(all_paires)
                         liste_des_matchs = matchs(tournois, all_paires)
                         creation_tour(tournois, liste_des_matchs)
                 if commande == "3":
