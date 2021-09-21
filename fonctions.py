@@ -440,6 +440,7 @@ def creation_tour(tournois,liste_matchs, debut):
             Le {} a bien été enregistré.   
         """.format(tour.nom))
 
+
 def classement_deja_pris(classement):
     db = TinyDB('db.json')
     joueurs = db.table('Joueurs')
@@ -449,6 +450,21 @@ def classement_deja_pris(classement):
         return True
     else:
         return False
+
+def classement_unique(classement):
+    classement = int(classement)
+    db = TinyDB('db.json')
+    players = db.table('Joueurs')
+    q = Query()
+    while True:
+        try:
+            player = players.search(q.classement == classement)[0]
+        except:
+            break
+        nouveau_classement = player['classement'] + 1
+        classement_unique(nouveau_classement)
+        player_update = players.update({'classement':nouveau_classement}, (q.classement == classement))
+
 
 
 def changer_classement_joueurs(tournois):
@@ -484,6 +500,7 @@ def changer_classement_joueurs(tournois):
         nouveau_classement = input('Entre le nouveau classement : ')
         champ_vide(nouveau_classement)
         nouveau_classement = classement_verification(nouveau_classement)
+        classement_unique(nouveau_classement)
 
         players_table.update({'classement': nouveau_classement}, ((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1])
                                                                       & (q.tournois == tournois)))
@@ -830,7 +847,7 @@ def creating_paires(tournois, liste_joueurs):
     nouvelle_liste = paire_3[0]
 
     paire_4 = [nouvelle_liste[0], nouvelle_liste[1]]
-
+    print(paire_4)
     print("""
         Liste des matchs pour le tour 1 :
 
@@ -871,6 +888,12 @@ q = Query()
 
 
 """
-Améliorer la fonction qui permet de modifier le classement d'un jour pour qu'elle vérifie si qqn a déjà ce classement
+Améliorer la fonction qui permet de modifier le classement d'un joueur pour qu'elle vérifie si qqn a déjà ce classement
 ou non
+ajouter plusieurs dates aux tournois si cela se passe sur plusieurs jours
+mettre à jours la docstring et l'ajouter si elle n'y est pas
+mettre les fichiers dans modeles, vue et contrôles
+finir le fichier README
+au niveau du changement du classement d'un joueur, le script veut creer un 5eme tour
+et le doublon des utilisateurs dans les matchs
 """

@@ -71,4 +71,9 @@ def marvin():
     marvin = db.search(q.prenom == 'marvin')
     print(marvin)
 
-
+def m():
+    return False
+if m():
+    print("True")
+else:
+    print('non')
