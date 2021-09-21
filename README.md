@@ -41,10 +41,10 @@ Chaque action est numérotée. Pour le menu principal on aura 6 commandes :
 créer un tournois, choisir un tournois, afficher la liste des acteurs par ordre alphabétique ou par classement, afficher la liste de tous les tournois, puis quitter l'application.
 
 Si vous entrez 1 :
-La liste de toutes les informations concernant un tournois vous sera demandée. (nom, lieu, date etc..)
+Vous allez créer un tournois, le programme vous demandera plusieurs informations comme le nom du tournois, le lieu, la date, le contrôle du temps et une description.
 
 Si vous entrez 2 :
-La liste de tous les tournois avec des infos comme le nom, le lieu, la date et le contrôle du temps vous seront affichés.
+Le programme affichera la liste de tous les tournois avec des infos comme le nom, le lieu, la date et le contrôle du temps.
 Pour choisir le tournois avec lequel vous voudrez intéragir il suffira d'entrer son nom.
 
 Si vous entrez 3:
@@ -58,4 +58,6 @@ le programme affichera la liste de tous les tournois avec leur nom, date, lieu e
 
 Si vous entrez q :
 Le programme s'arrête.
+
+
 
