@@ -59,5 +59,33 @@ le programme affichera la liste de tous les tournois avec leur nom, date, lieu e
 Si vous entrez q :
 Le programme s'arrête.
 
+Le deuxième menu apparaît lorsque vous entrez "2" dans le menu principal. 
+
+Si vous entrez 1 :
+Le programme utilisera la fonction qui crée 8 joueurs avec des classements random. Bien que les personnes aient le même nom et prénom, elles sont bien différentes les unes des autres. L'id est différents pour chaque joueurs. Les 8 joueurs seront donc associés au tournois choisi auparavant.
+
+Si vous entrez 2:
+Le programme va démarrer un tour, la liste des 4 paires sera affiché, puis vous pourrez entrer le résultat pour chaque paire.
+! Attention à ne pas faire de manipulations pendant que le tour se termine complétement et ne quittez pas l'application tant que les 4 résultats n'ont pas été rempli !
+Le seul résultat qui est nécéssaire est celui du joueur de gauche, l'algorithme se chargera de d'administrer le résultat à l'adversaire.
+
+Si vous entrez 3 :
+Vous allez pouvoir modifier le classement d'un joueur. Le programme vous affichera la liste des joueurs associès au tournois, vous pourrez écrire le nom et prénom de celui dont vous voudrez changer le classement puis changer son classement.
+
+Si vous entrez 4 :
+Le programme affichera la liste des acteurs du tournois par ordre alphabétique.
+
+Si vous entrez 5 :
+Le programme affichera la liste des acteurs du tournois par ordre de classement dans l'ordre croissant.
+
+Si vous entrez 6 :
+Le programme affichera la liste de tous les tours du tournois choisi.
+
+Si vous entrez 7 :
+Le programme affichera la liste de tous les matchs du tournois choisi.
+
+Si vous entrez q:
+Vous sortirez du deuxième menu et vous retournez dans le menu principal.
+
 
 
