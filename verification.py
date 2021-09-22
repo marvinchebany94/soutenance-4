@@ -58,10 +58,11 @@ def verification_controle_du_temps(reponse):
 def sexe_verification(reponse):
     liste_reponses = ['m', 'f']
     try:
-        i = liste_reponses.index(reponse)
-        return liste_reponses[i]
+        liste_reponses.index(reponse)
+        return True
     except ValueError:
-        return "Tu n'as pas entré la bonne information."
+        return False
+
 
 
 def classement_verification(classement):
@@ -69,6 +70,7 @@ def classement_verification(classement):
         int(classement)
     except ValueError:
         print("La valeur n'est pas correcte.")
+        return False
 
         sys.exit()
     while int(classement) <= 0:

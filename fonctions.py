@@ -162,22 +162,49 @@ def creation_liste_joueur():
     while i < 8:
         i += 1
 
-        nom = input("Nom de famille : ")
-        nom = champ_vide(nom)
+        while True:
+            nom = input("Nom de famille : ")
+            if nom == "":
+                continue
+            else:
+                pass
+        while True:
+            prenom = input("Prénom : ")
+            if prenom == "":
+                continue
+            else:
+                break
+        while True:
+            date_de_naissance = input("Date de naissance (jj/mm/aa) : ")
+            if date_de_naissance == "":
+                continue
+            else:
+                date_split = date_de_naissance.split('/')
+                if date_verification(date_split[0], date_split[1], date_split[2]):
+                    break
+                else:
+                    continue
+        while True:
+            sexe = input("sexe (m/f) : ")
+            if sexe == "":
+                continue
+            else:
+                if sexe_verification(sexe):
+                    break
+                else:
+                    continue
+        while True:
+            classement = input("Classement : ")
+            if classement == "":
+                continue
+            else:
+                if classement_verification(classement) == False:
+                    continue
+                else:
+                    classement = classement_verification(classement)
+                    break
 
-        prenom = input("Prénom : ")
-        prenom = champ_vide(prenom)
 
-        date_de_naissance = input("Date de naissance (jj/mm/aa) : ")
-        date_de_naissance = champ_vide(date_de_naissance)
-
-        sexe = input("sexe (m/f) : ")
-        sexe = champ_vide(sexe)
-        sexe_verification(sexe)
-
-        classement = input("Classement : ")
-        classement = champ_vide(classement)
-        classement = classement_verification(classement)
 
         tournois = choix_du_tournois
 
