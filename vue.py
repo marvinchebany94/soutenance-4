@@ -3,7 +3,7 @@ from tinydb import TinyDB
 from fonctions import creation_tournois, creation_liste_joueur, add_players_to_tournament, creation_paires, matchs,\
     changer_classement_joueurs, creation_tour, search_player_by_classement, \
     liste_acteurs_odre_de_classement, liste_matchs_d_un_tournois, liste_tours_d_un_tournois, liste_triee, \
-    choix_du_tournois, etape_3_4_systeme_suisse, creating_paires, nombre_de_tours, time_now
+    choix_du_tournois, etape_3_4_systeme_suisse, creating_paires, nombre_de_tours, time_now, creation_liste_joueur
 from modele import creation_joueurs, liste_acteurs_odre_alphabetique, liste_joueurs, liste_des_tournois,\
     liste_id_for_each_players
 from verification import commandes_verifications
@@ -86,23 +86,61 @@ def main():
                 if commande == "q":
                     break
                 if commande == "1":
-                    if liste_id_for_each_players(tournois) == []:
-                        creation_joueurs(tournois)
-                        liste_des_joueurs = liste_joueurs(tournois)
-                        add_players_to_tournament(tournois)
-                    else:
-                        print('Tu as déjà créé des joueurs pour ce tournois.')
+                    while True:
+                        print('\n')
+                        if len(liste_id_for_each_players(tournois)) == 8:
+                            print("8 joueurs ont déjà été inscris à ce tournois.".upper())
+                            print('\n')
+                            break
+                        if 0 < len(liste_id_for_each_players(tournois)) < 8:
+                            print("""
+                                VOUS ALLEZ CONTINUER A CREER DES JOUEURS MANUELLEMENT
+                            """)
+                            creation_liste_joueur(tournois)
+                            add_players_to_tournament(tournois)
+                        else:
+                            print("Créer une liste de joueurs automatiquement(1)")
+                            print("Créer une liste de joueurs manuellement(2)")
+                            print("q pour quitter")
+                            cmd = input("Veuillez entrer votre commande : ")
+                            if cmd == "1":
+                                creation_joueurs(tournois)
+                                liste_des_joueurs = liste_joueurs(tournois)
+                                add_players_to_tournament(tournois)
+                                break
+                            if cmd == "2":
+                                print("""
+                                    VOUS ALLEZ CREER UNE LISTE DE JOUEURS MANUELLEMENT
+                                """)
+                                creation_liste_joueur(tournois)
+                                add_players_to_tournament(tournois)
+                                break
+                            if cmd == "q":
+                                break
                 if commande == "2":
                     """
                         PROBLEME A REGLER AU NIVEAU DE LA CREATION DES TOURS
                     """
                     numero_tour = nombre_de_tours(tournois)
+                    if len(liste_id_for_each_players(tournois)) != 8:
+                        print("Vous ne pouvez pas créer un tour, le tournois n'est pas encore plein.")
+                        break
                     if numero_tour == 5:
                         print("""
                         VOUS NE POUVEZ PLUS CREER DE TOURS, LE TOURNOIS EST TERMINE.
                         VEUILLEZ INDIQUER UN NOUVEAU CLASSEMENT POUR CHAQUE JOUEURS.
                         """)
-                        changer_classement_joueurs(tournois)
+                        while True:
+                            cmd = input('q pour quitter | c pour continuer : ')
+                            if cmd == "q":
+                                break
+                            if cmd == "c":
+                                changer_classement_joueurs(tournois)
+                                continue
+                            else:
+                                print("Commande invalide")
+                        break
+
                     if numero_tour == 1:
                         print("""
                             VOUS ALLEZ CREER LE TOUR NUMERO {}

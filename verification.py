@@ -72,13 +72,11 @@ def classement_verification(classement):
         print("La valeur n'est pas correcte.")
         return False
 
-        sys.exit()
-    while int(classement) <= 0:
+    if int(classement) <= 0:
         print("Tu en peux pas être classé en-dessous de 0.")
-        classement = input(": ")
-        classement_verification(classement)
-        break
-    return int(classement)
+        return False
+    else:
+        return int(classement)
 
 
 def commandes_verifications(liste, commande):

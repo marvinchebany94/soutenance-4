@@ -2,9 +2,10 @@
 Ce fichier va contenir toutes les fonctions du projet
 """
 import random
+import sys
 from tinydb import TinyDB, where, Query
 from datetime import datetime
-from modele import Matchs, Tournois, liste_des_tournois, Joueur, liste_joueurs, Tours
+from modele import Matchs, Tournois, liste_des_tournois, Joueur, liste_joueurs, Tours, id_auto_increment
 from verification import champ_vide, date_verification, test_choix_du_tournois, verification_controle_du_temps,\
     verification_tournois_already_exists, sexe_verification, classement_verification
 
@@ -146,7 +147,7 @@ def choix_du_tournois():
             continue
 
 
-def creation_liste_joueur():
+def creation_liste_joueur(tournois):
     """
     La fonction servira à créer 8 joueurs pour un tournois choisi.
     La fonction repetera une boucle 8 fois afin d'y inscrire les informations sur chaque joueurs.
@@ -157,17 +158,26 @@ def creation_liste_joueur():
 
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')
-    players_table.truncate()
-
-    while i < 8:
+    q = Query()
+    players_in_tournament = players_table.search(q.tournois == tournois)
+    len_players = len(players_in_tournament)
+    x = 8 - len_players
+    print("Nombre de joueurs restants à créer : {}".format(x))
+    while i < x:
         i += 1
-
+        cmd = input('Entrez q pour quitter ou c pour continuer : ')
+        if cmd == "q":
+            sys.exit()
+        if cmd == "c":
+            pass
+        else:
+            print("Mauvaise commande.")
         while True:
             nom = input("Nom de famille : ")
             if nom == "":
                 continue
             else:
-                pass
+                break
         while True:
             prenom = input("Prénom : ")
             if prenom == "":
@@ -179,10 +189,14 @@ def creation_liste_joueur():
             if date_de_naissance == "":
                 continue
             else:
-                date_split = date_de_naissance.split('/')
-                if date_verification(date_split[0], date_split[1], date_split[2]):
-                    break
-                else:
+                try:
+                    date_split = date_de_naissance.split('/')
+                    if date_verification(int(date_split[0]), int(date_split[1]), int(date_split[2])):
+                        break
+                    else:
+                        continue
+                except:
+                    print("Tu as mal rempli le champ.")
                     continue
         while True:
             sexe = input("sexe (m/f) : ")
@@ -202,25 +216,26 @@ def creation_liste_joueur():
                     continue
                 else:
                     classement = classement_verification(classement)
+                    classement_unique(classement)
                     break
 
-
-
-        tournois = choix_du_tournois
-
-        joueur = Joueur(nom, prenom, date_de_naissance, sexe, classement, tournois)
+        points = 0
+        joueurs_affrontes = []
+        id = id_auto_increment()
+        joueur = Joueur(nom, prenom, date_de_naissance, sexe, classement, tournois, points, joueurs_affrontes, id)
 
         #on enregistre le joueur ici
         try:
-
-            print(players_table.all())
             serialized_player = {
                 'nom':joueur.nom,
                 'prenom':joueur.prenom,
                 'date de naissance':joueur.date_de_naissance,
                 'sexe':joueur.sexe,
                 'classement':joueur.classement,
-                'tournois':joueur.tournois
+                'tournois':joueur.tournois,
+                'points':joueur.points,
+                'liste joueurs affrontes':joueur.joueurs_affrontes,
+                'id':joueur.id
             }
 
             players_table.insert(serialized_player)
@@ -231,8 +246,8 @@ def creation_liste_joueur():
         except:
             print("Le joueur n'a pas été enregistré dans la base de données.")
 
-        print(players_table.all())
-    return choix_du_tournois
+        print(players_table.all()[-1])
+
 
 def add_players_to_tournament(tournois):
     """
@@ -874,7 +889,7 @@ def creating_paires(tournois, liste_joueurs):
     nouvelle_liste = paire_3[0]
 
     paire_4 = [nouvelle_liste[0], nouvelle_liste[1]]
-    print(paire_4)
+
     print("""
         Liste des matchs pour le tour 1 :
 
