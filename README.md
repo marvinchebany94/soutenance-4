@@ -71,7 +71,7 @@ Le programme utilisera la fonction qui crée 8 joueurs avec des classements rand
 Si vous entrez 2:
 Le programme va démarrer un tour, la liste des 4 paires sera affiché, puis vous pourrez entrer le résultat pour chaque paire.
 ! Attention à ne pas faire de manipulations pendant que le tour se termine complétement et ne quittez pas l'application tant que les 4 résultats n'ont pas été rempli !
-Le seul résultat qui est nécéssaire est celui du joueur de gauche, l'algorithme se chargera de d'administrer le résultat à l'adversaire. Une fois les 4 tours terminés vous pourrez utiliser la commande 2 pour changer le classement des joueurs.
+Le seul résultat qui est nécéssaire est celui du joueur de gauche, l'algorithme se chargera d'administrer le résultat à l'adversaire. Une fois les 4 tours terminés vous pourrez utiliser la commande 2 pour changer le classement des joueurs.
 
 Si vous entrez 3 :
 Vous allez pouvoir modifier le classement d'un joueur. Le programme vous affichera la liste des joueurs associès au tournois, vous pourrez écrire le nom et prénom de celui dont vous voudrez changer le classement puis changer son classement.
