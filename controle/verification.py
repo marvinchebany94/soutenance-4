@@ -1,17 +1,20 @@
-#coding:utf-8
-import sys, os
+# coding: utf-8
+import sys
+import os
+import datetime
 current_path = sys.argv[0]
 current_path = os.path.dirname(current_path)
 current_path = os.path.dirname(current_path)
 sys.path.append(current_path)
-
-import datetime
 from modeles.modele import liste_des_tournois
+
 
 def date_verification(j, m, a):
     """
-    La fonction va tester la validité d'une date, dans un premier temps elle vérifie que les 3 paramètres sont des
-    chiffres, puis la date sera testée via datetime qui peut renvoyer un ValueError si la date est invalide.
+    La fonction va tester la validité d'une date, dans un premier temps
+    elle vérifie que les 3 paramètres sont des chiffres, puis la date
+    sera testée via datetime qui peut renvoyer un ValueError
+    si la date est invalide.
     :param j: correspond au chiffre du jour
     :param m: correspond au chiffre du mois
     :param a: corespond au chiffre de l'année
@@ -30,17 +33,21 @@ def date_verification(j, m, a):
 
 def verification_tournois_already_exists(nom_du_tournois):
     """
-    La fonction va vérifier si le tournois que la personne veut créer existe déjà ou non dans la base de données.
-    On va utiliser liste_des_tournois qui renvoit la liste des noms de tous les tournois
+    La fonction va vérifier si le tournois que la personne veut créer
+    existe déjà ou non dans la base de données.
+    On va utiliser liste_des_tournois qui renvoit la liste des noms
+    de tous les tournois
     :param nom_du_tournois: Le nom du tournois que l'on veut vérifier
-    :return: True si le nom du tournois existe déjà, false si celui-ci n'est pas dans la base de données.
+    :return: True si le nom du tournois existe déjà, false si celui-ci
+    n'est pas dans la base de données.
     """
     liste_tournois = liste_des_tournois(False)
     if nom_du_tournois in liste_tournois:
         print("""
-            Le tournois que vous voulez créer existe déjà dans la base de donnée.
-             Veuillez trouver un autre nom pour celui-ci.       
-            """)
+    Le tournois que vous voulez créer existe déjà dans \
+    la base de donnée.
+    Veuillez trouver un autre nom pour celui-ci.
+        """)
         return True
     else:
         return False
@@ -48,8 +55,10 @@ def verification_tournois_already_exists(nom_du_tournois):
 
 def test_choix_du_tournois(reponse):
     """
-    La fonction va vérifier si l'utilisateur a bien choisi un nom de tournois figurant dans la base de données ou non.
-    :param reponse: le paramétre demandé est le nom du tournois qui a été choisi par l'utilisateur.
+    La fonction va vérifier si l'utilisateur a bien choisi un nom de
+    tournois figurant dans la base de données ou non.
+    :param reponse: le paramétre demandé est le nom du tournois qui
+    a été choisi par l'utilisateur.
     :return: False si la reponse n'est pos dans la liste, True si elle l'est.
     """
     liste_tournois = liste_des_tournois(False)
@@ -64,7 +73,8 @@ def verification_controle_du_temps(reponse):
     """
     La fonction va vérifier si la réponse est bien dans la liste ou non.
     :param reponse: La réponse qui va être testée.
-    :return: False si la réponse n'est pas dans la liste, l'item correspondant si la réponse est bonne.
+    :return: False si la réponse n'est pas dans la liste, l'item
+    correspondant si la réponse est bonne.
     """
     liste_manieres_de_jouer = ["bullet", "blitz", "coup rapide"]
     try:
@@ -93,7 +103,8 @@ def classement_verification(classement):
     """
     La fonction vérifie que la valeur du classement soit bonne.
     :param classement: la valeur à vérifier
-    :return: False si la valeur est mauvaise, retourne la valeur si elle est valide
+    :return: False si la valeur est mauvaise, retourne la valeur
+    si elle est valide
     """
     try:
         int(classement)
@@ -110,10 +121,12 @@ def classement_verification(classement):
 
 def commandes_verifications(liste, commande):
     """
-    La fonction vérifie que la commande se trouve bien dans la liste des commandes
+    La fonction vérifie que la commande se trouve bien dans la
+    liste des commandes
     :param liste: la liste des commandes en question
     :param commande: la commande que la fonction va vérifier
-    :return: retourne une valeur de la liste si la commande existe, ou retourne un message d'erreur si elle n'existe pas
+    :return: retourne une valeur de la liste si la commande
+    existe, ou retourne un message d'erreur si elle n'existe pas
     """
     try:
         i = liste.index(commande)

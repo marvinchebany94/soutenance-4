@@ -1,22 +1,28 @@
-#coding:utf-8
+# coding: utf-8
 """
 Ce fichier va contenir toutes les fonctions du projet
 """
-import sys, os
+import sys
+import os
+from datetime import datetime
+from tinydb import TinyDB, where, Query
+
 current_path = sys.argv[0]
 current_path = os.path.dirname(current_path)
 current_path = os.path.dirname(current_path)
 sys.path.append(current_path)
-import random
-from tinydb import TinyDB, where, Query
-from datetime import datetime
-from modeles.modele import Matchs, Tournois, liste_des_tournois, Joueur, liste_joueurs, Tours, id_auto_increment
-from controle.verification import date_verification, test_choix_du_tournois, verification_controle_du_temps,\
-    verification_tournois_already_exists, sexe_verification, classement_verification
+from modeles.modele import Matchs, Tournois, liste_des_tournois, Joueur, \
+    liste_joueurs, Tours, id_auto_increment
+from controle.verification import date_verification, test_choix_du_tournois, \
+    verification_controle_du_temps, \
+    verification_tournois_already_exists, sexe_verification, \
+    classement_verification
+
 
 def time_now():
     """
-    La fonction sert à retourner la date et l'heure au moment de son utilisation
+    La fonction sert à retourner la date et l'heure au moment de son
+    utilisation
     :return: date et heure
     """
     date = datetime.now()
@@ -26,12 +32,13 @@ def time_now():
 
 def creation_tournois():
     """
-    La fonction va nous permettre de créer un tournois en entrant divers information.
-    Chaque informations est vérifiée via les fonctions de 'verification.py
+    La fonction va nous permettre de créer un tournois en entrant
+    ivers information.
+    Chaque informations est vérifiée via les fonctions de
+    verification.py
     """
     while True:
         nom = input("Choisissez un nom pour le tournois : ")
-        
         if nom == "":
             continue
         else:
@@ -73,17 +80,20 @@ def creation_tournois():
                 continue
 
     while True:
-        controle_du_temps = input("Contrôle du temps (bullet, blitz ou coup rapide) : ")
+        controle_du_temps = input("Contrôle du temps (bullet, \
+blitz ou coup rapide) : ")
         if controle_du_temps == "":
             continue
         else:
-            controle_du_temps = verification_controle_du_temps(controle_du_temps)
-            if controle_du_temps == False:
+            controle_du_temps = verification_controle_du_temps(
+                controle_du_temps)
+            if not controle_du_temps:
                 continue
             else:
                 break
     while True:
-        description = input("Si vous voulez ajouter une description au tournois : ")
+        description = input("Si vous voulez ajouter une description \
+au tournois : ")
         if description == "":
             continue
         else:
@@ -92,24 +102,26 @@ def creation_tournois():
     date_creation = time_now()
     date_de_creation = date_creation
 
-    tournois = Tournois(nom=nom, lieu=lieu, date=date, nombre_de_tours=4, tournees=None,
-                        controle_du_temps=controle_du_temps, liste_des_joueurs=None, description=description,
+    tournois = Tournois(nom=nom, lieu=lieu, date=date, nombre_de_tours=4,
+                        tournees=None,
+                        controle_du_temps=controle_du_temps,
+                        liste_des_joueurs=None, description=description,
                         date_de_creation=date_de_creation)
 
     db = TinyDB('db.json')
     tournois_table = db.table('Tournois')
     q = Query()
     serialized_tournois = {
-        'nom':tournois.nom,
-        'lieu':tournois.lieu,
-        'date':tournois.date,
-        'nombre de tours':tournois.nombre_de_tours,
-        'tournees':tournois.tournees,
-        'contrôle du temps':tournois.controle_du_temps,
-        'liste des joueurs':tournois.liste_des_joueurs,
-        'description':tournois.description,
-        'date de creation':tournois.date_de_creation
-        }
+        'nom': tournois.nom,
+        'lieu': tournois.lieu,
+        'date': tournois.date,
+        'nombre de tours': tournois.nombre_de_tours,
+        'tournees': tournois.tournees,
+        'contrôle du temps': tournois.controle_du_temps,
+        'liste des joueurs': tournois.liste_des_joueurs,
+        'description': tournois.description,
+        'date de creation': tournois.date_de_creation
+    }
     tournois_table.insert(serialized_tournois)
     print("Le tournois a bien été créé et enregistré.")
 
@@ -121,25 +133,27 @@ def creation_tournois():
         Date : {}
         Contrôle du temps : {}
         Description : {}
-    """.format(tournois_table['nom'], tournois_table['lieu'], tournois_table['date'], tournois_table['contrôle du temps'],
-        tournois_table['description']))
+    """.format(tournois_table['nom'], tournois_table['lieu'],
+               tournois_table['date'],
+               tournois_table['contrôle du temps'],
+               tournois_table['description']))
 
 
 def choix_du_tournois():
     """
-    La fonction sera utilisée lorsque l'utilisateur voudra choisir un tournois afin d'y éffectuer
+    La fonction sera utilisée lorsque l'utilisateur voudra choisir un
+    tournois afin d'y éffectuer
     des actions.
     :return: le tournois que l'utilisateur aura choisi
     """
     liste_tournois = liste_des_tournois(True)
-
 
     print("""
             Veuillez selectionner un tournois dans la liste suivante :
         """)
 
     for tournois in liste_tournois:
-        print('- ',tournois)
+        print('- ', tournois)
     print('\n')
 
     while True:
@@ -154,7 +168,8 @@ def choix_du_tournois():
 def creation_liste_joueur(tournois):
     """
     La fonction servira à créer 8 joueurs pour un tournois choisi.
-    La fonction repetera une boucle 8 fois afin d'y inscrire les informations sur chaque joueur.
+    La fonction repetera une boucle 8 fois afin d'y inscrire
+    "les informations sur chaque joueur.
     Les informations seront testées par des fonctions de 'verification.py'
     """
     i = 0
@@ -194,7 +209,9 @@ def creation_liste_joueur(tournois):
             else:
                 try:
                     date_split = date_de_naissance.split('/')
-                    if date_verification(int(date_split[0]), int(date_split[1]), int(date_split[2])):
+                    if date_verification(int(date_split[0]),
+                                         int(date_split[1]),
+                                         int(date_split[2])):
                         break
                     else:
                         continue
@@ -215,7 +232,7 @@ def creation_liste_joueur(tournois):
             if classement == "":
                 continue
             else:
-                if classement_verification(classement) == False:
+                if not classement_verification(classement):
                     continue
                 else:
                     classement = classement_verification(classement)
@@ -225,27 +242,27 @@ def creation_liste_joueur(tournois):
         points = 0
         joueurs_affrontes = []
         id = id_auto_increment()
-        joueur = Joueur(nom, prenom, date_de_naissance, sexe, classement, tournois, points, joueurs_affrontes, id)
+        joueur = Joueur(nom, prenom, date_de_naissance, sexe, classement,
+                        tournois, points, joueurs_affrontes, id)
 
-        #on enregistre le joueur ici
         try:
             serialized_player = {
-                'nom':joueur.nom,
-                'prenom':joueur.prenom,
-                'date de naissance':joueur.date_de_naissance,
-                'sexe':joueur.sexe,
-                'classement':joueur.classement,
-                'tournois':joueur.tournois,
-                'points':joueur.points,
-                'liste joueurs affrontes':joueur.joueurs_affrontes,
-                'id':joueur.id
+                'nom': joueur.nom,
+                'prenom': joueur.prenom,
+                'date de naissance': joueur.date_de_naissance,
+                'sexe': joueur.sexe,
+                'classement': joueur.classement,
+                'tournois': joueur.tournois,
+                'points': joueur.points,
+                'liste joueurs affrontes': joueur.joueurs_affrontes,
+                'id': joueur.id
             }
 
             players_table.insert(serialized_player)
 
-            print("""
-                Le joueur {} {} a bien été enregistré dans la base de données.        
-            """.format(joueur.nom, joueur.prenom))
+            print("Le joueur {} {} a bien été enregistré dans la base de \
+données."
+                  .format(joueur.nom, joueur.prenom))
         except:
             print("Le joueur n'a pas été enregistré dans la base de données.")
 
@@ -254,27 +271,33 @@ def creation_liste_joueur(tournois):
 
 def add_players_to_tournament(tournois):
     """
-    La fonction prend en paramètre le tournois auquel vous voulez ajouter des joueurs.
-    Chaque tournois à une liste de joueurs au départ vide, la fonction utilisera la fonction
-    liste_joueurs() qui retournera la liste des joueurs d'un tournois, puis fera un update de 'liste des joueurs'
+    La fonction prend en paramètre le tournois auquel vous voulez ajouter
+    des joueurs.
+    Chaque tournois à une liste de joueurs au départ vide, la fonction
+    utilisera la fonction
+    liste_joueurs() qui retournera la liste des joueurs d'un tournois,
+    puis fera un update de 'liste des joueurs'
     en y insérant la liste.
     """
     db = TinyDB('db.json')
     tournois_table = db.table('Tournois')
     q = Query()
-    tournois_find = tournois_table.search(q.nom == tournois)[0]
     liste_des_joueurs = liste_joueurs(tournois)
 
     try:
-        tournois_table.update({'liste des joueurs':liste_des_joueurs}, q.nom == tournois)
+        tournois_table.update({'liste des joueurs': liste_des_joueurs},
+                              q.nom == tournois)
     except:
-        print("Les joueurs n'ont pas été enregistré dans la base de données du tournois")
+        print("Les joueurs n'ont pas été enregistré dans la base de\
+données du tournois")
 
 
 def search_player_by_id(id):
     """
-    La fonction va retourner une variable avec le nom et prénom d'une personne en fonction de l'id en paramètre
-    :param id: l'id dont on souhaite prendre des informations, l'id doit être un chiffre
+    La fonction va retourner une variable avec le nom et prénom d'une
+    personne en fonction de l'id en paramètre
+    :param id: l'id dont on souhaite prendre des informations,
+    l'id doit être un chiffre
     :return: la variable nom_prenom
     """
     db = TinyDB('db.json')
@@ -287,21 +310,20 @@ def search_player_by_id(id):
 
 def creation_paires(id):
     """
-    la fonction va créer 2 listes, les 4 meilleurs joueurs et les 4 moins bons.
-    Dans un second temps elle va associer le 1er joueur de la 1ère liste avec le 1er de la deuxième et
+    la fonction va créer 2 listes, les 4 meilleurs joueurs
+    et les 4 moins bons.
+    Dans un second temps elle va associer le 1er joueur de la
+    1ère liste avec le 1er de la deuxième et
     ainsi de suite.
     Cette fonction sert seulement pour le premier tour et non les 3 autres.
-    :return: une liste contenant 4 listes contenant les 4 paires avec le nom / prénom pour chaque joueur
+    :return: une liste contenant 4 listes contenant les 4 paires avec
+    le nom / prénom pour chaque joueur
     """
 
     liste_ordre_classement = liste_acteurs_odre_de_classement(id, False)
-    #on crée les 2 groupes
     premier_groupe = liste_ordre_classement[0:4]
-
     deuxieme_groupe = liste_ordre_classement[4:8]
 
-
-    #on crée les 4 paires
     paire_1 = (premier_groupe[0], deuxieme_groupe[0])
     paire_2 = (premier_groupe[1], deuxieme_groupe[1])
     paire_3 = (premier_groupe[2], deuxieme_groupe[2])
@@ -309,34 +331,46 @@ def creation_paires(id):
 
     print("""
         Liste des matchs pour le tour 1 :
-        
+                {}
             {} vs {}
-            
+                {}
             {} vs {}
-            
+                {}
             {} vs {}
-            
+                {}
             {} vs {}
-    """.format(search_player_by_id(paire_1[0]), search_player_by_id(paire_1[1]),
-            search_player_by_id(paire_2[0]), search_player_by_id(paire_2[1]),
-            search_player_by_id(paire_3[0]), search_player_by_id(paire_3[1]),
-            search_player_by_id(paire_4[0]), search_player_by_id(paire_4[1])))
+    """.format('\n',
+               search_player_by_id(paire_1[0]),
+               search_player_by_id(paire_1[1]),
+               '\n',
+               search_player_by_id(paire_2[0]),
+               search_player_by_id(paire_2[1]),
+               '\n',
+               search_player_by_id(paire_3[0]),
+               search_player_by_id(paire_3[1]),
+               '\n',
+               search_player_by_id(paire_4[0]),
+               search_player_by_id(paire_4[1])))
 
-    #on retourne la liste des 4 paires
     return [paire_1, paire_2, paire_3, paire_4]
 
 
 def matchs(tournois, paires):
     """
-    Pour chaque paire la fonction va demander un score seulement pour le joueur qui se trouve à gauche, puis selon ce
-    score là, elle s'adaptera et créra le résultat du deuxième adversaire.
-    elle va ensuite utiliser la fonction update_points_joueur() qui servira à mettre à jour le nombre de points d'un
-    joueur
-    puis utiliser update_joueurs_affrontes() afin d'ajouter le joueur affronté dans la liste des joueurs affrontès pour
+    Pour chaque paire la fonction va demander un score seulement pour le
+     joueur qui se trouve à gauche, puis selon ce score là,
+     elle s'adaptera et créra le résultat du deuxième adversaire.
+    elle va ensuite utiliser la fonction update_points_joueur()
+    qui servira à mettre à jour le nombre de points d'un joueur
+    puis utiliser update_joueurs_affrontes() afin d'ajouter le
+    joueur affronté dans la liste des joueurs affrontès pour
     chaque joueurs.
-    Chaque tuple sera ensuite inseré dans la table des matchs dans la base de données.
-    :param tournois: tournois pour lequel nous allons créer des matchs
-    :param paires: liste des 4 paires retournées par creation_paires() ou creating_paires() selon le tour
+    Chaque tuple sera ensuite inseré dans la table des
+    matchs dans la base de données.
+    :param tournois: tournois pour lequel nous allons
+    créer des matchs
+    :param paires: liste des 4 paires retournées par creation_paires()
+     ou creating_paires() selon le tour
     :return: la liste de tous les matchs qui ont été enregistré
     """
     tournois = tournois
@@ -345,7 +379,7 @@ def matchs(tournois, paires):
     db = TinyDB('db.json')
     matchs_table = db.table('Matchs')
     players_table = db.table('Joueurs')
-
+    q = Query()
     for paire in paires:
 
         joueur_1 = players_table.search(q.id == paire[0])[0]
@@ -356,12 +390,12 @@ def matchs(tournois, paires):
         joueur_2 = joueur_2['nom'] + " " + joueur_2['prenom']
 
         print("""
-                 Match : 
-                  {} vs {}   
-        """.format(joueur_1, joueur_2))
+            Match :
+                {} vs {}
+            """.format(joueur_1, joueur_2))
 
         while True:
-            scores = [0,0.5,1]
+            scores = [0, 0.5, 1]
             score_1 = input("Veuillez entrer le score du joueur à gauche :")
             if score_1 == "":
                 continue
@@ -387,25 +421,21 @@ def matchs(tournois, paires):
                         score_2 = float(score_2)
                         break
 
-        score_j1 = update_points_joueurs(joueur_1, tournois, score_1)
-        score_j2 = update_points_joueurs(joueur_2, tournois, score_2)
-
-        j1 = joueur_1.split()
-        j2 = joueur_2.split()
+        update_points_joueurs(joueur_1, tournois, score_1)
+        update_points_joueurs(joueur_2, tournois, score_2)
 
         update_joueurs_affrontes(tournois, paire[0], paire[1])
         update_joueurs_affrontes(tournois, paire[1], paire[0])
 
-        tuple = ([joueur_1, score_1], [joueur_2, score_2]) #ajout d'un id unique
+        tuple = ([joueur_1, score_1], [joueur_2, score_2])
         liste_matchs.append(tuple)
 
-    #matchs_table.truncate()
     for m in liste_matchs[0:4]:
         tuple_match = Matchs(paire=m, tournois=tournois)
 
         match_serialized = {
-            'paire':tuple_match.paire,
-            'tournois':tuple_match.tournois
+            'paire': tuple_match.paire,
+            'tournois': tuple_match.tournois
         }
         matchs_table.insert(match_serialized)
 
@@ -432,49 +462,50 @@ def matchs(tournois, paires):
     return liste_matchs[0:4]
 
 
-def creation_tour(tournois,liste_matchs, debut):
+def creation_tour(tournois, liste_matchs, debut):
     """
-    La fonction vérifie l'existence d'un tour pour un tournois donné. Si aucun tour n'est renvoyé la fonction va créer
-    le premier tour.
-    Si un tour existe déjà, la fonction va prendre le chiffre du dernier tour, et lui ajouter 1 afin de créer le tour
-    suivant.
+    La fonction vérifie l'existence d'un tour pour un tournois donné.
+    Si aucun tour n'est renvoyé la fonction va créer le premier tour.
+    Si un tour existe déjà, la fonction va prendre le chiffre du dernier
+     tour, et lui ajouter 1 afin de créer le tour suivant.
     :param tournois: Tounrois pour lequel le tour doit être créé
-    :param liste_matchs: la liste des matchs qui doivent être insérés dans la table des tours
-    :return: Un message disant que le tour X a bien été enregistré + un aperçu de la colonne qui correspond au tour dans
+    :param liste_matchs: la liste des matchs qui doivent être
+    insérés dans la table des tours.
+    :return: Un message disant que le tour X a bien été enregistré +
+    un aperçu de la colonne qui correspond au tour dans
     la base de données.
     """
-    #on va voir si un tour existe déjà pour le tournois en question
+
     db = TinyDB('db.json')
     tours_table = db.table('Tours')
     q = Query()
 
-    #on recherche si un round existe et est associé au tournois ou non :
     resultat = tours_table.search(where('tournois') == tournois)
 
-    #si le résultat est vide on crée le round 1 :
     if not resultat:
         fin = time_now()
-        tour = Tours(nom='Round 1', debut=debut, fin=fin, match=liste_matchs, tournois=tournois)
+        tour = Tours(nom='Round 1', debut=debut, fin=fin,
+                     match=liste_matchs, tournois=tournois)
         tour_serialized = {
-            'nom':tour.nom,
-            'debut':tour.debut,
-            'fin':tour.fin,
-            'match':tour.match,
-            'tournois':tour.tournois
+            'nom': tour.nom,
+            'debut': tour.debut,
+            'fin': tour.fin,
+            'match': tour.match,
+            'tournois': tour.tournois
 
         }
         tours_table.insert(tour_serialized)
         tours_table = tours_table.search(where('tournois') == tournois)[-1]
-        print("""
-            Le {} a bien été enregistré.
-        """.format(tour.nom, ))
+        print("Le {} a bien été enregistré.".format(tour.nom))
+
     else:
         find_last_round = tours_table.search(q.tournois == tournois)[-1]
         round_number = int(find_last_round['nom'][-1])
         round_number += 1
         nom = "Round " + str(round_number)
         fin = time_now()
-        tour = Tours(nom=nom, debut=debut, fin=fin, match=liste_matchs, tournois=tournois)
+        tour = Tours(nom=nom, debut=debut, fin=fin, match=liste_matchs,
+                     tournois=tournois)
         tour_serialized = {
             'nom': tour.nom,
             'debut': tour.debut,
@@ -486,14 +517,16 @@ def creation_tour(tournois,liste_matchs, debut):
         tours_table.insert(tour_serialized)
         tours_table = tours_table.search(where('tournois') == tournois)[-1]
         print("""
-            Le {} a bien été enregistré.   
+            Le {} a bien été enregistré.
         """.format(tour.nom))
 
 
 def classement_unique(classement):
     """
-    La fonction va voir si un classement est déjà associé à un joueur, dans ce cas là la fonction va ajouter +1 au
-    classement de la personne en quesrion afin de ne pas avoir des joueurs avec le même classement dans la base de données
+    La fonction va voir si un classement est déjà associé à un joueur,
+    dans ce cas là la fonction va ajouter +1 au
+    classement de la personne en quesrion afin de ne pas avoir des joueurs
+     avec le même classement dans la base de données.
     :param classement: le classement à tester
     """
     classement = int(classement)
@@ -507,65 +540,75 @@ def classement_unique(classement):
             break
         nouveau_classement = player['classement'] + 1
         classement_unique(nouveau_classement)
-        player_update = players.update({'classement':nouveau_classement}, (q.classement == classement))
+        players.update({'classement': nouveau_classement},
+                       (q.classement == classement))
 
 
 def changer_classement_joueurs(tournois):
     """
-    La fonction va montrer la liste de tous les joueurs présents dans la base de données, puis demander à l'utilisateur
-    d'en choisir un.
-    La fonction va lui montrer les données de la personne, puis lui demander de changer son classement.
-    Le classement choisi par l'utilisateur sera vérifié via la fonction classement_verification()
+    La fonction va montrer la liste de tous les joueurs présents dans la
+    base de données, puis demander à l'utilisateur d'en choisir un.
+    La fonction va lui montrer les données de la personne, puis lui demander
+     de changer son classement.
+    Le classement choisi par l'utilisateur sera vérifié via la fonction
+    classement_verification()
     Si tout est ok, la fonction va mettre à jour le classement de la personne.
-    :return: Retourne la colonne dans la base de données correspondant au joueur choisi.
+    :return: Retourne la colonne dans la base de données correspondant
+    au joueur choisi.
     """
     db = TinyDB('db.json')
     players_table = db.table("Joueurs")
     q = Query()
 
-    print("Voici la liste des joueurs dans le tournois ' {} '  :".format(tournois))
+    print("Voici la liste des joueurs dans le tournois ' {} '  :"
+          .format(tournois))
     for joueur in liste_joueurs(tournois):
         print('- ', joueur)
     print('\n')
     while True:
-        nom_prenom = input("Choisissez la personne à qui vous voulez modifier le classement : ")
+        nom_prenom = input("Choisissez la personne à qui vous voulez \
+modifier le classement : ")
         if nom_prenom not in liste_joueurs(tournois):
             continue
         else:
             nom_prenom = nom_prenom.split(" ")
             break
     try:
-        player = players_table.search((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1])
+        player = players_table.search((q.nom == nom_prenom[0])
+                                      & (q.prenom == nom_prenom[1])
                                       & (q.tournois == tournois))[0]
         print("""
             Nom : {}
             Prénom : {}
             classement : {}
-        """.format(player['nom'],player['prenom'], player['classement']))
+        """.format(player['nom'], player['prenom'], player['classement']))
 
         while True:
             nouveau_classement = input('Entre le nouveau classement : ')
             if nouveau_classement == "":
                 continue
             else:
-                nouveau_classement = classement_verification(nouveau_classement)
-                if nouveau_classement == False:
+                nouveau_classement = classement_verification(
+                    nouveau_classement)
+                if not nouveau_classement:
                     continue
                 else:
                     classement_unique(nouveau_classement)
                     break
 
-        players_table.update({'classement': nouveau_classement}, ((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1])
-                                                                      & (q.tournois == tournois)))
-        player = players_table.search((q.nom == nom_prenom[0]) & (q.prenom == nom_prenom[1])
-                                          & (q.tournois == tournois))[0]
-        print("""   
-            Le classement a été mis à jour :
-            Nom : {}
-            Prénom : {}
-            Nouveau classement : {}        
-        """.format(player['nom'], player['prenom'], player['classement']))
-
+        players_table.update({'classement': nouveau_classement},
+                             ((q.nom == nom_prenom[0])
+                              & (q.prenom == nom_prenom[1])
+                              & (q.tournois == tournois)))
+        player = players_table.search((q.nom == nom_prenom[0])
+                                      & (q.prenom == nom_prenom[1])
+                                      & (q.tournois == tournois))[0]
+        print("""
+Le classement a été mis à jour :
+    Nom : {}
+    Prénom : {}
+    Nouveau classement : {}
+""".format(player['nom'], player['prenom'], player['classement']))
 
     except:
         print("La personne n'existe pas dans la base de données.")
@@ -573,12 +616,15 @@ def changer_classement_joueurs(tournois):
 
 def update_points_joueurs(joueur, tournois, point_a_ajouter):
     """
-    la fonction va chercher la colonne d'un joueur dans la table des Joueurs.
+    la fonction va chercher la colonne d'un joueur dans la
+    table des Joueurs.
     Elle va additioner les points actuels avec les points à ajouter.
-    Puis faire une mise à jours des points du joueurs, et l'enregistrer dans la base de données.
+    Puis faire une mise à jours des points du joueurs, et
+    l'enregistrer dans la base de données.
     :param joueur: Joueur auquel on va ajouter des points
     :param point_a_ajouter: Nombre de points à lui ajouter
-    :return: le nombre de points que le joueur a après la mise à jours de la base de données.
+    :return: le nombre de points que le joueur a après la
+    mise à jours de la base de données.
     """
     joueur = joueur.split()
     nom = joueur[0]
@@ -586,12 +632,18 @@ def update_points_joueurs(joueur, tournois, point_a_ajouter):
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')
     q = Query()
-    query_player = players_table.search((q.nom == nom) & (q.prenom == prenom) & (q.tournois == tournois))[0]
+    query_player = players_table.search((q.nom == nom)
+                                        & (q.prenom == prenom)
+                                        & (q.tournois == tournois))[0]
     points_actuels = query_player['points']
     points_finaux = points_actuels + point_a_ajouter
-    player_updating = players_table.update({'points':points_finaux}, ((q.nom == nom) & (q.prenom == prenom) &
-                                                                      (q.tournois == tournois)))
-    query_player = players_table.search((q.nom == nom) & (q.prenom == prenom) & (q.tournois == tournois))[0]
+    players_table.update({'points': points_finaux},
+                         ((q.nom == nom)
+                          & (q.prenom == prenom)
+                          & (q.tournois == tournois)))
+    query_player = players_table.search((q.nom == nom)
+                                        & (q.prenom == prenom)
+                                        & (q.tournois == tournois))[0]
 
     return query_player['points']
 
@@ -613,8 +665,10 @@ def search_classement_by_id(id):
 
 def search_player_by_classement(classement):
     """
-    la fonction va chercher le nom et prénom d'une personne en fonction du classement passé en paramétre
-    :param classement: Le classement de la personne dont on recherche le nom et prénom
+    la fonction va chercher le nom et prénom d'une personne en fonction
+     du classement passé en paramétre
+    :param classement: Le classement de la personne dont on recherche
+    le nom et prénom
     :return: nom et prénom de la personne trouvée
     """
     db = TinyDB('db.json')
@@ -631,7 +685,8 @@ def liste_acteurs_odre_de_classement(id, show_liste):
     """
     La fonction retourne la liste des acteurs par ordre de classement.
     :param id: liste des id des joueurs que l'on veut trier
-    :return: la liste triée par ordre de classement contrnant l'id des joueurs
+    :return: la liste triée par ordre de classement contrnant
+    l'id des joueurs
     """
     liste_classement_joueur = []
     for i in id:
@@ -641,16 +696,14 @@ def liste_acteurs_odre_de_classement(id, show_liste):
     liste_joueur_ordre_croissant = sorted(liste_classement_joueur)
     liste_acteurs_odre_de_classement = []
     for classement in liste_joueur_ordre_croissant:
-        joueur = search_player_by_classement(classement)
         db = TinyDB('db.json')
         players = db.table('Joueurs')
         q = Query()
         player = players.search(q.classement == classement)[0]
         id = player['id']
-        if show_liste == True:
+        if show_liste:
             nom = player['nom']
             prenom = player['prenom']
-            nom_prenom = nom + " " + prenom
             classement = player['classement']
             tournois = player['tournois']
             print("""
@@ -668,9 +721,12 @@ def liste_acteurs_odre_de_classement(id, show_liste):
 
 def liste_matchs_d_un_tournois(tournois):
     """
-    La fonction va rerchercher tous les matchs concernant un tournois précis.
-    Elle va renvoyer pour chacun des matchs un print avec les 2 joueurs, et le vainqueur.
-    :param tournois: tournois pour lequel nous cherchons la liste des matchs
+    La fonction va rerchercher tous les matchs concernant un
+    tournois précis.
+    Elle va renvoyer pour chacun des matchs un print avec les
+    2 joueurs, et le vainqueur.
+    :param tournois: tournois pour lequel nous cherchons la
+    liste des matchs
     :return: la liste de tous les matchs du tournois
     """
     db = TinyDB('db.json')
@@ -702,9 +758,12 @@ def liste_matchs_d_un_tournois(tournois):
 
 def liste_tours_d_un_tournois(tournois):
     """
-    La fonction renvoit la liste de tous les tours d'un tournois spécifique.
-    :param tournois: Tournois pour lequel le script va chercher les tours.
-    :return: Le script renvoit la colonne correspondant à chaque tours.
+    La fonction renvoit la liste de tous les tours d'un tournois
+    spécifique.
+    :param tournois: Tournois pour lequel le script va chercher
+    les tours.
+    :return: Le script renvoit la colonne correspondant à chaque
+    tours.
     """
     db = TinyDB('db.json')
     tours_table = db.table('Tours')
@@ -740,9 +799,12 @@ def liste_tours_d_un_tournois(tournois):
 
 def liste_triee(liste_joueurs, tournois):
     """
-    la fonction va placer les joueurs selon leurs points dans plusieurs listes, puis va trier ces listes dans l'ordre
-    croissant, puis former une liste finale correspondantà une liste trièe par ordre croissant.
-    :param liste_joueurs: la liste comportant le nom et prénom de chaque jours que vous voulez trier.
+    la fonction va placer les joueurs selon leurs points dans plusieurs
+    listes, puis va trier ces listes dans l'ordre
+    croissant, puis former une liste finale correspondantà une liste
+    trièe par ordre croissant.
+    :param liste_joueurs: la liste comportant le nom et prénom de chaque
+    jours que vous voulez trier.
     :return: la liste liste_triee qui contient les id des joueurs
     """
     groupe_4_pts = []
@@ -754,21 +816,21 @@ def liste_triee(liste_joueurs, tournois):
     groupe_1_pts = []
     groupe_0_5_pts = []
     groupe_0_pts = []
-    listes = [groupe_4_pts, groupe_3_5_pts, groupe_3_pts, groupe_2_5_pts, groupe_2_pts, groupe_1_5_pts, groupe_1_pts,
-              groupe_0_5_pts, groupe_0_pts]
+    listes = [groupe_4_pts, groupe_3_5_pts, groupe_3_pts, groupe_2_5_pts,
+              groupe_2_pts, groupe_1_5_pts, groupe_1_pts, groupe_0_5_pts,
+              groupe_0_pts]
 
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')
     q = Query()
 
     for player in liste_joueurs:
-
-
         p = player.split()
         nom = p[0]
         prenom = p[1]
-        nom_prenom = nom + " " + prenom
-        player_query = players_table.search((q.nom == nom) & (q.prenom == prenom) & (q.tournois == tournois))[0]
+        player_query = players_table.search((q.nom == nom)
+                                            & (q.prenom == prenom)
+                                            & (q.tournois == tournois))[0]
         player_points = player_query['points']
         id = player_query['id']
         if player_points == 0:
@@ -790,14 +852,15 @@ def liste_triee(liste_joueurs, tournois):
         if player_points == 4:
             groupe_4_pts.append(id)
     liste_triee = []
-    for l in listes:
+    for liste in listes:
 
-        if len(l) == 1:
-            liste_triee += l
-        elif len(l) == 0:
+        if len(liste) == 1:
+            liste_triee += liste
+        elif len(liste) == 0:
             pass
         else:
-            liste_ordre_croissant = liste_acteurs_odre_de_classement(l, False)
+            liste_ordre_croissant = liste_acteurs_odre_de_classement(
+                liste, False)
             liste_triee += liste_ordre_croissant
 
     return liste_triee
@@ -805,16 +868,20 @@ def liste_triee(liste_joueurs, tournois):
 
 def update_joueurs_affrontes(joueur, joueur_a_ajouter):
     """
-    La fonction va mettre à jours la liste des joueurs affrontés par un joueur.
+    La fonction va mettre à jours la liste des joueurs affrontés
+    par un joueur.
     :param joueur: l'id du joueur auquel on va ajouter un joueur
-    :param joueur_a_ajouter: id du joueur que l'on va ajouter dans la liste des joueurs affrontes du joueur en question
+    :param joueur_a_ajouter: id du joueur que l'on va ajouter dans
+    la liste des joueurs affrontes du joueur en question
     """
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')
     q = Query()
     player = players_table.search(q.id == joueur)[0]
     joueur_a_ajouter = players_table.search(q.id == joueur_a_ajouter)[0]
-    joueur_a_ajouter = joueur_a_ajouter['prenom'] + " " + joueur_a_ajouter['nom']
+    joueur_a_ajouter = joueur_a_ajouter['prenom'] + \
+                       ' ' + joueur_a_ajouter['nom']
+
     liste_joueur_to_add = []
     if player['liste joueurs affrontes'] == []:
         pass
@@ -823,17 +890,20 @@ def update_joueurs_affrontes(joueur, joueur_a_ajouter):
             liste_joueur_to_add.append(p)
 
     liste_joueur_to_add.append(joueur_a_ajouter)
-    player_update = players_table.update({'liste joueurs affrontes':liste_joueur_to_add},
-                                         (q.id == joueur))
+    players_table.update(
+        {'liste joueurs affrontes': liste_joueur_to_add},
+        (q.id == joueur))
 
 
 def liste_joueurs_affrontes(joueur):
     """
-    La fonction va chercher la liste des joueurs affrontès par un joueur, puis nous la retourner.
-    :param joueur: id du joueur pour lequel la fonction va retourner la liste des joueurs affrontes
-    :return: une liste contenant le nom et prénom de tous les joueurs affrontès par le joueur
+    La fonction va chercher la liste des joueurs affrontès par un joueur,
+     puis nous la retourner.
+    :param joueur: id du joueur pour lequel la fonction va retourner la
+    liste des joueurs affrontes
+    :return: une liste contenant le nom et prénom de tous les joueurs
+    affrontès par le joueur
     """
-
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')
     q = Query()
@@ -847,17 +917,21 @@ def liste_joueurs_affrontes(joueur):
 def etape_3_4_systeme_suisse(liste_joueurs, tournois):
     """
     la fonction correspond à l'étape 3 et 4 du système suisse.
-    Pour créer une paire on va faire joueur 1 vs joueur 2, si le joueur 2 a déjà été affronté par le joueur 1,
+    Pour créer une paire on va faire joueur 1 vs joueur 2, si le joueur 2 a
+    déjà été affronté par le joueur 1,
     alors le joueur 1 affronte le 3, et ainsi de suite.
-    lorsqu'une paire est créée, les 2 joueurs sont supprimés de la liste, et l'algorithme fait la même chose pour les
+    lorsqu'une paire est créée, les 2 joueurs sont supprimés de la liste,
+    et l'algorithme fait la même chose pour les
     joueurs 1 et 2 de la nouvelle liste.
     :param liste_joueurs: liste des joueurs triès par la fonction liste_triee()
     :param tournois: tournois en question
-    :return: la liste des joueurs après la suppression des 2 items, et la paire créée contenant nom et prénom des 2
+    :return: la liste des joueurs après la suppression des 2 items, et
+    la paire créée contenant nom et prénom des 2
     joueurs
     """
     liste = liste_joueurs
-    liste_joueurs_affrontes_par_j1 = liste_joueurs_affrontes(liste[0], tournois)
+    liste_joueurs_affrontes_par_j1 = liste_joueurs_affrontes(liste[0],
+                                                             tournois)
     print('liste : ', liste_joueurs_affrontes_par_j1)
     i = 1
 
@@ -867,11 +941,11 @@ def etape_3_4_systeme_suisse(liste_joueurs, tournois):
         q = Query()
         joueur = joueurs.search(q.id == liste[i])[0]
         prenom_nom = joueur['prenom'] + " " + joueur['nom']
-        print("prenom nom : ",prenom_nom)
+        print("prenom nom : ", prenom_nom)
         if prenom_nom not in liste_joueurs_affrontes_par_j1:
             paire = [liste[0], liste[i]]
             liste.remove(liste[0])
-            liste.remove(liste[i-1])
+            liste.remove(liste[i - 1])
             break
         else:
             i += 1
@@ -895,21 +969,22 @@ def nombre_de_tours(tournois):
 
 def creating_paires(tournois, liste_joueurs):
     """
-    Pour chaque paire on utilise la fonction etape_3_4_systeme_suisse() qui nous renvoit une paire + une nouvelle liste.
+    Pour chaque paire on utilise la fonction etape_3_4_systeme_suisse()
+    qui nous renvoit une paire + une nouvelle liste.
     On fait ça 4 fois afin d'avoir nos 4 paires
     :param tournois: tournois en question
-    :param liste_joueurs: liste des joueurs contenant pour chaque joueurs un nom et prénom
-    :return: les 4 paires contenant le nom et prénom des 2 adversaires. Ces paires seront utilisées dans la fonction
+    :param liste_joueurs: liste des joueurs contenant pour chaque
+    joueur un nom et prénom
+    :return: les 4 paires contenant le nom et prénom des 2 adversaires.
+    Ces paires seront utilisées dans la fonction
     matchs()
     """
 
     paire_1 = etape_3_4_systeme_suisse(liste_joueurs, tournois)
     nouvelle_liste = paire_1[0]
 
-
     paire_2 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
     nouvelle_liste = paire_2[0]
-
 
     paire_3 = etape_3_4_systeme_suisse(nouvelle_liste, tournois)
     nouvelle_liste = paire_3[0]
@@ -928,9 +1003,13 @@ def creating_paires(tournois, liste_joueurs):
             {} vs {}
 
             {} vs {}
-    """.format(tour, search_player_by_id(paire_1[1][0]), search_player_by_id(paire_1[1][1]),
-                   search_player_by_id(paire_2[1][0]), search_player_by_id(paire_2[1][1]),
-                   search_player_by_id(paire_3[1][0]), search_player_by_id(paire_3[1][1]),
-                   search_player_by_id(paire_4[0]), search_player_by_id(paire_4[1])))
+    """.format(tour, search_player_by_id(paire_1[1][0]),
+               search_player_by_id(paire_1[1][1]),
+               search_player_by_id(paire_2[1][0]),
+               search_player_by_id(paire_2[1][1]),
+               search_player_by_id(paire_3[1][0]),
+               search_player_by_id(paire_3[1][1]),
+               search_player_by_id(paire_4[0]),
+               search_player_by_id(paire_4[1])))
 
-    return paire_1[1], paire_2[1], paire_3[1], paire_4#[1]
+    return paire_1[1], paire_2[1], paire_3[1], paire_4
