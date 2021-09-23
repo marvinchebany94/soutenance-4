@@ -208,18 +208,17 @@ def creation_joueurs(tournois):
     :return: Un print disant que tous les joueurs ont bien été créé.
     """
     liste_classement = []
-    marvin = Joueur("decocq", "marvin", "20/07/98", "m", 1, tournois, 0, [], "")
-    marvin2 = Joueur("chebany", "rocket", "20/07/98", "m", 3, tournois, 0, [], "")
-    marvin3 = Joueur("dunoyer", "kahyss", "16/03/2019", "m", 10, tournois, 0, [], "")
-    loan = Joueur("dunoyer", "loan", "01/11/00", "f", 100, tournois, 0, [], "")
-    papa = Joueur("decocq", "martial", "13/10/71", "m", 41, tournois, 0, [], "")
-    maman = Joueur("chebany", "angela", "16/03/2019", "f", 2, tournois, 0, [], "")
-    mamie = Joueur("chebany", "henriette", "09/06/50", "f", 34, tournois, 0, [], "")
-    papy = Joueur("chebany", "cheban", "12/04/44", "m", 68, tournois, 0, [], "")
-    liste_des_joueurs = [marvin, marvin2, marvin3, loan, papa, maman, mamie, papy]
+    joueur1 = Joueur("decocq", "marvin", "20/07/98", "m", 1, tournois, 0, [], "")
+    joueur2 = Joueur("martin", "john", "20/07/98", "m", 3, tournois, 0, [], "")
+    joueur3 = Joueur("simon", "kahyss", "16/03/2019", "m", 10, tournois, 0, [], "")
+    joueur4 = Joueur("morel", "loan", "01/11/00", "f", 100, tournois, 0, [], "")
+    joueur5 = Joueur("lemercier", "martial", "13/10/71", "m", 41, tournois, 0, [], "")
+    joueur6 = Joueur("teller", "angela", "16/03/2019", "f", 2, tournois, 0, [], "")
+    joueur7 = Joueur("morrow", "henriette", "09/06/50", "f", 34, tournois, 0, [], "")
+    joueur8 = Joueur("wendling", "cheban", "12/04/44", "m", 68, tournois, 0, [], "")
+    liste_des_joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
     db = TinyDB('db.json')
     players_table = db.table('Joueurs')
-    #players_table.truncate()
     for player in liste_des_joueurs:
         id = id_auto_increment()
         while True:
