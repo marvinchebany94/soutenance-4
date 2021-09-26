@@ -16,7 +16,7 @@ from modeles.modele import Matchs, Tournois, liste_des_tournois, Joueur, \
 from controle.verification import date_verification, test_choix_du_tournois, \
     verification_controle_du_temps, \
     verification_tournois_already_exists, sexe_verification, \
-    classement_verification
+    classement_verification, nombre_de_jours_verification
 
 
 def time_now():
@@ -37,6 +37,8 @@ def creation_tournois():
     Chaque informations est vérifiée via les fonctions de
     verification.py
     """
+    i = 0
+    dates = []
     while True:
         nom = input("Choisissez un nom pour le tournois : ")
         if nom == "":
@@ -53,31 +55,60 @@ def creation_tournois():
         else:
             break
     while True:
-        j = input("Entrez le jour du tournois (ex : 11) : ")
-        if j == "":
+        nombre = input('Veuillez indiquer sur combien de jours le tournois \
+sera joué(1 à 4) : ')
+        if not nombre_de_jours_verification(nombre):
             continue
         else:
-            j = int(j)
-            break
-    while True:
-        m = input("Entrez le mois du tournois (ex : 6) : ")
-        if m == "":
-            continue
-        else:
-            m = int(m)
-            break
-
-    while True:
-        a = input("Entrez l'année du tournois (ex : 2021) : ")
-        if a == "":
-            continue
-        else:
-            a = int(a)
-            date = str(j) + "/" + str(m) + "/" + str(a)
-            if date_verification(j, m, a):
-                break
-            else:
-                continue
+            nombre = int(nombre)
+            while i < nombre:
+                i += 1
+                print("Jour {} :".format(i))
+                while True:
+                    while True:
+                        j = input("Entrez le jour du tournois (ex : 11) : ")
+                        if j == "":
+                            continue
+                        else:
+                            try:
+                                j = int(j)
+                                break
+                            except ValueError:
+                                print("valeur demandée invalide.")
+                                continue
+                    while True:
+                        m = input("Entrez le mois du tournois (ex : 6) : ")
+                        if m == "":
+                            continue
+                        else:
+                            try:
+                                m = int(m)
+                                break
+                            except ValueError:
+                                print("Valeur demandée invalide.")
+                                continue
+                    while True:
+                        a = input("Entrez l'année du tournois (ex : 2021) : ")
+                        if a == "":
+                            continue
+                        else:
+                            try:
+                                a = int(a)
+                                break
+                            except ValueError:
+                                print("Valide demandée invalide.")
+                                continue
+                    date = str(j) + "/" + str(m) + "/" + str(a)
+                    if date_verification(j, m, a):
+                        if date not in dates:
+                            dates.append(date)
+                            break
+                        else:
+                            print("la date que tu as créé existe déjà.")
+                            continue
+                    else:
+                        continue
+        break
 
     while True:
         controle_du_temps = input("Contrôle du temps (bullet, \
@@ -102,7 +133,7 @@ au tournois : ")
     date_creation = time_now()
     date_de_creation = date_creation
 
-    tournois = Tournois(nom=nom, lieu=lieu, date=date, nombre_de_tours=4,
+    tournois = Tournois(nom=nom, lieu=lieu, date=dates, nombre_de_tours=4,
                         tournees=None,
                         controle_du_temps=controle_du_temps,
                         liste_des_joueurs=None, description=description,
@@ -128,15 +159,21 @@ au tournois : ")
     tournois_table = tournois_table.search(q.nom == tournois.nom)[0]
 
     print("""
-        Tournois : {}
-        Lieu : {}
-        Date : {}
-        Contrôle du temps : {}
-        Description : {}
+Tournois : {}
+Lieu : {}
+Contrôle du temps : {}
+Description : {}
     """.format(tournois_table['nom'], tournois_table['lieu'],
-               tournois_table['date'],
                tournois_table['contrôle du temps'],
                tournois_table['description']))
+
+    if len(tournois_table['date']) == 1:
+        print("Date : {}".format(tournois_table['date'][0]))
+    else:
+        i = 0
+        for date in tournois_table['date']:
+            i += 1
+            print("Jour {} : {}".format(i, date))
 
 
 def choix_du_tournois():
@@ -148,21 +185,25 @@ def choix_du_tournois():
     """
     liste_tournois = liste_des_tournois(True)
 
-    print("""
-            Veuillez selectionner un tournois dans la liste suivante :
-        """)
+    if liste_tournois == []:
+        print("la liste des tournois est vide.")
+    else:
 
-    for tournois in liste_tournois:
-        print('- ', tournois)
-    print('\n')
+        print("""
+                Veuillez selectionner un tournois dans la liste suivante :
+            """)
 
-    while True:
-        choix_du_tournois = input("Choix du tournois : ")
-        if test_choix_du_tournois(choix_du_tournois):
-            return choix_du_tournois
-            break
-        else:
-            continue
+        for tournois in liste_tournois:
+            print('- ', tournois)
+        print('\n')
+
+        while True:
+            choix_du_tournois = input("Choix du tournois : ")
+            if test_choix_du_tournois(choix_du_tournois):
+                return choix_du_tournois
+                break
+            else:
+                continue
 
 
 def creation_liste_joueur(tournois):

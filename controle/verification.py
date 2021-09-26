@@ -20,6 +20,7 @@ def date_verification(j, m, a):
     :param a: corespond au chiffre de l'année
     :return: True si la date est valide ou false si elle ne l'est pas
     """
+
     if type(j) != int or type(m) != int or type(a) != int:
         print("La date est invalide")
     else:
@@ -133,3 +134,23 @@ def commandes_verifications(liste, commande):
         return liste[i]
     except ValueError:
         return "La commande ne figure pas dans la liste"
+
+def nombre_de_jours_verification(nombre):
+    """
+    La fonction vérifie que le nombre de jours choisi par l'utilisateur
+    se trouve bien entre 1 et 4
+    :param nombre:
+    :return:
+    """
+    liste_nombre = [1, 2, 3, 4]
+    try:
+        nombre = int(nombre)
+    except ValueError:
+        print("Veuillez entrer des chiffres seulement.")
+        return False
+    try:
+        liste_nombre.index(nombre)
+        return True
+    except ValueError:
+        print("Le chiffre indiqué ne se trouve pas entre 1 et 4.")
+        return False
