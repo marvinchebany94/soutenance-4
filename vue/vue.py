@@ -72,13 +72,13 @@ def main():
 
         if cmd == "3":
             print("~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR \
-                    ODRE ALPHABETIQUE : ~")
+ODRE ALPHABETIQUE : ~")
             liste_des_id = liste_id_for_each_players("")
             liste_acteurs_odre_alphabetique(liste_des_id, "")
 
         if cmd == "4":
             print("~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS \
-                    PAR ODRE DE CLASSEMENT : ~")
+PAR ODRE DE CLASSEMENT : ~")
             liste_des_joueurs = liste_id_for_each_players("")
             liste_acteurs_odre_de_classement(liste_des_joueurs, True)
 
@@ -87,7 +87,8 @@ def main():
             liste_des_tournois(True)
 
         while cmd == "2":
-
+            if tournois is None:
+                break
             numero_tour = nombre_de_tours(tournois)
             if numero_tour == 5:
                 print("Tour 5")
@@ -121,7 +122,7 @@ fini, vous pouvez modifier les classements ici(2)"
                         if 0 < len(liste_id_for_each_players(tournois)) < 8:
                             print("""
                                 VOUS ALLEZ CONTINUER A CREER DES JOUEURS \
-                                MANUELLEMENT
+MANUELLEMENT
                             """)
                             creation_liste_joueur(tournois)
                             add_players_to_tournament(tournois)
@@ -158,9 +159,9 @@ automatiquement(1)")
                     if numero_tour == 5:
                         print("""
                         VOUS NE POUVEZ PLUS CREER DE TOURS, LE TOURNOIS EST \
-                        TERMINE.
+TERMINE.
                         VEUILLEZ INDIQUER UN NOUVEAU CLASSEMENT POUR \
-                        CHAQUE JOUEURS.
+CHAQUE JOUEURS.
                         """)
                         while True:
                             cmd = input('q pour quitter | c pour continuer : ')
@@ -201,23 +202,23 @@ automatiquement(1)")
                     changer_classement_joueurs(tournois)
                 if commande == "4":
                     print("~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR \
-                            ODRE ALPHABETIQUE : ~")
+ODRE ALPHABETIQUE : ~")
                     liste_des_id = liste_id_for_each_players(tournois)
                     liste_acteurs_odre_alphabetique(liste_des_id, tournois)
                 if commande == "5":
-                    print("~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR\
-                         ODRE DE CLASSEMENT : ~")
+                    print("~VOUS ALLEZ VOIR LA LISTE DE TOUS LES ACTEURS PAR \
+ODRE DE CLASSEMENT : ~")
 
                     liste_des_id = liste_id_for_each_players(tournois)
                     liste_acteurs_odre_de_classement(liste_des_id, True)
                 if commande == "6":
                     print("VOUS ALLEZ VOIR LA LISTE DE TOURS LES \
-                          TOURS DU TOURNOIS :")
+TOURS DU TOURNOIS :")
                     liste_tours_d_un_tournois(tournois)
                 if commande == "7":
                     print("""
                         VOUS ALLEZ VOIR LA LISTE DE TOUS LES \
-                        MATCHS DU TOURNOIS :
+MATCHS DU TOURNOIS :
                     """)
                     liste_matchs_d_un_tournois(tournois)
 
