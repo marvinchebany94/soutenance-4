@@ -77,12 +77,19 @@ def liste_des_tournois(voir_la_liste):
         description = tournois['description']
         if voir_la_liste:
             print("""
-                tournois : {}
-                date : {}
-                lieu : {}
-                contrôle du temps : {}
-                description : {}
-            """.format(nom, date, ville, controle_du_temps, description))
+Tournois : {}
+Lieu : {}
+Contrôle du temps : {}
+Description : {}
+    """.format(nom, ville, controle_du_temps, description))
+
+            if len(date) == 1:
+                print("Date : {}".format(date[0]))
+            else:
+                i = 0
+                for d in date:
+                    i += 1
+                    print("Jour {} : {}".format(i, d))
         else:
             pass
         liste_tournois.append(tournois['nom'])
