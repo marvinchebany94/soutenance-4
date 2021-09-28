@@ -93,3 +93,9 @@ Vous sortirez du deuxième menu et vous retournez dans le menu principal.
 
 Pour ce qui conerne la base de données j'ai utilisé le module tinydb, pour plus d'infirmations rendez-vous ici : https://tinydb.readthedocs.io/en/latest/usage.html
 
+Comment générer un nouveau fichier Flake8-html ? Il faudra ouvrir son invite de commandes, se positioner dans le dossier comportant le code du projet puis 
+entrer cette commande : flake8 --format=html --htmldir=flake-report
+
+Cette commande va créer un dossier 'flake-report' à l'endroit ou vous avez lancé la commande.
+Il suffit d'ouvrir ce dossier, puis pour avoir le rapport de tous les fichiers pythons se trouvant dans le dossier il faudra double-cliquer sur le fichier index.html.
+Celui-ci ouvrira une page web sur laquelle nous verrons la liste de tous les soucis au niveau du code pour chaque fichiers python. Chaque erreur aura un code de référence, et vous montrera le numéro de la ligne ou il y a un problème.
