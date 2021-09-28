@@ -47,16 +47,18 @@ def creation_tournois():
             if verification_tournois_already_exists(nom):
                 continue
             else:
+                nom = nom.strip()
                 break
     while True:
         lieu = input("Choisissez le lieu du tournois : ")
         if lieu == "":
             continue
         else:
+            lieu = lieu.strip()
             break
     while True:
-        nombre = input('Veuillez indiquer sur combien de jours le tournois \
-sera joué(1 à 4) : ')
+        nombre = input('Veuillez indiquer si le tournois sera sur \
+un(1) ou plusieurs jours(2) : ')
         if not nombre_de_jours_verification(nombre):
             continue
         else:
@@ -236,12 +238,14 @@ def creation_liste_joueur(tournois):
             if nom == "":
                 continue
             else:
+                nom = nom.strip()
                 break
         while True:
             prenom = input("Prénom : ")
             if prenom == "":
                 continue
             else:
+                prenom = prenom.strip()
                 break
         while True:
             date_de_naissance = input("Date de naissance (jj/mm/aa) : ")
@@ -306,8 +310,6 @@ données."
                   .format(joueur.nom, joueur.prenom))
         except:
             print("Le joueur n'a pas été enregistré dans la base de données.")
-
-        print(players_table.all()[-1])
 
 
 def add_players_to_tournament(tournois):
@@ -424,10 +426,8 @@ def matchs(tournois, paires):
     for paire in paires:
 
         joueur_1 = players_table.search(q.id == paire[0])[0]
-        print(joueur_1)
         joueur_1 = joueur_1['nom'] + " " + joueur_1['prenom']
         joueur_2 = players_table.search(q.id == paire[1])[0]
-        print(joueur_2)
         joueur_2 = joueur_2['nom'] + " " + joueur_2['prenom']
 
         print("""
@@ -465,8 +465,8 @@ def matchs(tournois, paires):
         update_points_joueurs(joueur_1, tournois, score_1)
         update_points_joueurs(joueur_2, tournois, score_2)
 
-        update_joueurs_affrontes(tournois, paire[0], paire[1])
-        update_joueurs_affrontes(tournois, paire[1], paire[0])
+        update_joueurs_affrontes(paire[0], paire[1])
+        update_joueurs_affrontes(paire[1], paire[0])
 
         tuple = ([joueur_1, score_1], [joueur_2, score_2])
         liste_matchs.append(tuple)
@@ -785,7 +785,11 @@ def liste_matchs_d_un_tournois(tournois):
         if score_1 == 1:
             vainqueur = joueur_1
         elif score_1 == 0.5:
-            vainqueur = 'match nul'
+            print("""
+            match {} :
+                {} vs {}
+                Match Nul
+                    """.format(i, joueur_1, joueur_2))
         else:
             vainqueur = joueur_2
         print("""
@@ -971,9 +975,7 @@ def etape_3_4_systeme_suisse(liste_joueurs, tournois):
     joueurs
     """
     liste = liste_joueurs
-    liste_joueurs_affrontes_par_j1 = liste_joueurs_affrontes(liste[0],
-                                                             tournois)
-    print('liste : ', liste_joueurs_affrontes_par_j1)
+    liste_joueurs_affrontes_par_j1 = liste_joueurs_affrontes(liste[0])
     i = 1
 
     while True:
@@ -982,7 +984,6 @@ def etape_3_4_systeme_suisse(liste_joueurs, tournois):
         q = Query()
         joueur = joueurs.search(q.id == liste[i])[0]
         prenom_nom = joueur['prenom'] + " " + joueur['nom']
-        print("prenom nom : ", prenom_nom)
         if prenom_nom not in liste_joueurs_affrontes_par_j1:
             paire = [liste[0], liste[i]]
             liste.remove(liste[0])
@@ -1054,3 +1055,11 @@ def creating_paires(tournois, liste_joueurs):
                search_player_by_id(paire_4[1])))
 
     return paire_1[1], paire_2[1], paire_3[1], paire_4
+"""
+db = TinyDB('db.json')
+players = db.table('Joueurs')
+q = Query()
+marvin = players.search(q.tournois == "tournois soutenance")
+players.update({'nom':'chebany'}, ((q.prenom == "angela") & (q.tournois == "tournois soutenance")))
+marvin = players.search(q.tournois == "tournois soutenance")
+print(marvin)"""

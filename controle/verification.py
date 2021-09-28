@@ -142,15 +142,15 @@ def nombre_de_jours_verification(nombre):
     :param nombre:
     :return:
     """
-    liste_nombre = [1, 2, 3, 4]
+    liste_nombre = [1, 2]
     try:
         nombre = int(nombre)
     except ValueError:
-        print("Veuillez entrer des chiffres seulement.")
+        print("Veuillez entrer 1 ou 2.")
         return False
     try:
         liste_nombre.index(nombre)
         return True
     except ValueError:
-        print("Le chiffre indiqué ne se trouve pas entre 1 et 4.")
+        print("Le chiffre indiqué ne correspond pas à 1 ou 2.")
         return False
