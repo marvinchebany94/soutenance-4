@@ -36,6 +36,7 @@ Il est maintenant temps d'installer les modules nécéssaires au bon fonctionnem
 
 python -m pip install -r requirements.txt
 
+
 Vous pouvez maintenant lancer le script sans avoir de problèmes au niveau des modules.
 
 Lancez dans l'invite de commandes : chemin_du_fichier/tournament_creator.py
@@ -93,9 +94,13 @@ Vous sortirez du deuxième menu et vous retournez dans le menu principal.
 
 Pour ce qui conerne la base de données j'ai utilisé le module tinydb, pour plus d'infirmations rendez-vous ici : https://tinydb.readthedocs.io/en/latest/usage.html
 
+
 Comment générer un nouveau fichier Flake8-html ? Il faudra ouvrir son invite de commandes, se positioner dans le dossier comportant le code du projet puis 
 entrer cette commande : flake8 --format=html --htmldir=flake-report
 
 Cette commande va créer un dossier 'flake-report' à l'endroit ou vous avez lancé la commande.
 Il suffit d'ouvrir ce dossier, puis pour avoir le rapport de tous les fichiers pythons se trouvant dans le dossier il faudra double-cliquer sur le fichier index.html.
 Celui-ci ouvrira une page web sur laquelle nous verrons la liste de tous les soucis au niveau du code pour chaque fichiers python. Chaque erreur aura un code de référence, et vous montrera le numéro de la ligne ou il y a un problème.
+
+
+! Il est bon à savoir qu'avec tinydb, la base de données sera crée à l'endroit même ou le programme sera lancé, vérifier que le programme est toujours lancé au même endroit dans l'invite de commandes afin de ne pas perdre les données déjà enregistrées. La base de données qui sera créée s'appelle 'db.json', c'est dedans que seront inscrites toutes les données que vous voudrez sauvegarder. !
