@@ -69,6 +69,7 @@ def liste_des_tournois(voir_la_liste):
     Tournois_table = db.table('Tournois')
     Tournois_table = Tournois_table.all()
     liste_tournois = []
+    debut_fin = ['début : ', 'fin : ']
     for tournois in Tournois_table:
         nom = tournois['nom']
         date = tournois['date']
@@ -87,9 +88,13 @@ Description : {}
                 print("Date : {}".format(date[0]))
             else:
                 i = 0
-                for d in date:
-                    i += 1
-                    print("Jour {} : {}".format(i, d))
+                debut = date[0]
+                fin = date[1]
+                print("""
+Début : {}
+Fin : {}
+""".format(debut, fin))
+
         else:
             pass
         liste_tournois.append(tournois['nom'])
