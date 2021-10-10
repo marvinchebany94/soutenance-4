@@ -135,12 +135,13 @@ def commandes_verifications(liste, commande):
     except ValueError:
         return "La commande ne figure pas dans la liste"
 
+
 def nombre_de_jours_verification(nombre):
     """
-    La fonction vérifie que le nombre de jours choisi par l'utilisateur
-    se trouve bien entre 1 et 4
-    :param nombre:
-    :return:
+    La fonction vérifie que le nombre est bien 1 ou 2
+    :param nombre: Le nombre qui est testée
+    :return: True si le nombre est 1 ou 2, False si
+    celui-ci n'est pas dans la liste_nombre.
     """
     liste_nombre = [1, 2]
     try:

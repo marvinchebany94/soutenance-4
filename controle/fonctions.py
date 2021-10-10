@@ -33,8 +33,8 @@ def time_now():
 def creation_tournois():
     """
     La fonction va nous permettre de créer un tournois en entrant
-    ivers information.
-    Chaque informations est vérifiée via les fonctions de
+    divers information.
+    Chaque information est vérifiée via les fonctions de
     verification.py
     """
     i = 0
@@ -172,10 +172,12 @@ Description : {}
     if len(tournois_table['date']) == 1:
         print("Date : {}".format(tournois_table['date'][0]))
     else:
-        i = 0
-        for date in tournois_table['date']:
-            i += 1
-            print("Jour {} : {}".format(i, date))
+        debut = tournois_table['date'][0]
+        fin = tournois_table['date'][1]
+        print("""
+Début : {}
+Fin : {}
+""".format(debut, fin))
 
 
 def choix_du_tournois():
@@ -1055,11 +1057,17 @@ def creating_paires(tournois, liste_joueurs):
                search_player_by_id(paire_4[1])))
 
     return paire_1[1], paire_2[1], paire_3[1], paire_4
-"""
-db = TinyDB('db.json')
-players = db.table('Joueurs')
-q = Query()
-marvin = players.search(q.tournois == "tournois soutenance")
-players.update({'nom':'chebany'}, ((q.prenom == "angela") & (q.tournois == "tournois soutenance")))
-marvin = players.search(q.tournois == "tournois soutenance")
-print(marvin)"""
+
+def voir_les_points_des_joueurs(liste_id):
+    """
+    La fonction va écrire le nom et prénom de la personne
+    suivi par son nombre de points.
+    """
+    db = TinyDB('db.json')
+    joueurs = db.table('Joueurs')
+    q = Query()
+    for id in liste_id:
+        joueur = joueurs.search(q.id == id)[0]
+        nom_prenom = joueur['nom'] + " " + joueur['prenom']
+        points = joueur['points']
+        print("{} : {}".format(nom_prenom, points))

@@ -11,7 +11,8 @@ from controle.fonctions import creation_tournois, creation_liste_joueur, \
     changer_classement_joueurs, creation_tour, \
     liste_acteurs_odre_de_classement, liste_matchs_d_un_tournois, \
     liste_tours_d_un_tournois, liste_triee, choix_du_tournois, \
-    creating_paires, nombre_de_tours, time_now
+    creating_paires, nombre_de_tours, time_now, \
+    voir_les_points_des_joueurs
 from modeles.modele import creation_joueurs, liste_acteurs_odre_alphabetique, \
     liste_joueurs, liste_des_tournois,\
     liste_id_for_each_players
@@ -34,6 +35,7 @@ d'un joueur(3)",
 par ordre alphabétique(4)/ par classement(5)",
     "afficher la liste de tous les tours(6)",
     "afficher la liste de tous les matchs(7)",
+    "afficher les points des joueurs(8)",
     "q pour quitter"
 ]
 
@@ -44,7 +46,7 @@ def main():
     """)
     liste_commandes_generales = ["1", "2", "3", "4", "5", "q"]
     liste_commandes_pour_les_tournois = ["1", "2", "3", "4", "5", "6", "7",
-                                         "q"]
+                                         "8","q"]
 
     while True:
 
@@ -221,6 +223,15 @@ TOURS DU TOURNOIS :")
 MATCHS DU TOURNOIS :
                     """)
                     liste_matchs_d_un_tournois(tournois)
-
+                if commande == "8":
+                    print("""
+                        VOUS ALLER VOIR LA LISTE DE TOUS LES \
+JOUEURS AVEC LEURS POINTS :
+                    """)
+                    liste_id = liste_id_for_each_players(tournois)
+                    if not liste_id:
+                        print("Il faut créer une liste de joueurs.")
+                    else:
+                        voir_les_points_des_joueurs(liste_id)
 
 main()
