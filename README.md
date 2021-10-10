@@ -89,6 +89,9 @@ Le programme affichera la liste de tous les tours du tournois choisi.
 Si vous entrez 7 :
 Le programme affichera la liste de tous les matchs du tournois choisi.
 
+Si vous entrez 8 :
+le programme affichera le nom et prénom des participants du tournois ainsi que leurs points.
+
 Si vous entrez q:
 Vous sortirez du deuxième menu et vous retournez dans le menu principal.
 
