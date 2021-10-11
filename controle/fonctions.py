@@ -926,8 +926,8 @@ def update_joueurs_affrontes(joueur, joueur_a_ajouter):
     q = Query()
     player = players_table.search(q.id == joueur)[0]
     joueur_a_ajouter = players_table.search(q.id == joueur_a_ajouter)[0]
-    joueur_a_ajouter = joueur_a_ajouter['prenom'] + \
-                       ' ' + joueur_a_ajouter['nom']
+    joueur_a_ajouter = joueur_a_ajouter['prenom'] + " " +\
+                                                    joueur_a_ajouter['nom']
 
     liste_joueur_to_add = []
     if player['liste joueurs affrontes'] == []:
@@ -1057,6 +1057,7 @@ def creating_paires(tournois, liste_joueurs):
                search_player_by_id(paire_4[1])))
 
     return paire_1[1], paire_2[1], paire_3[1], paire_4
+
 
 def voir_les_points_des_joueurs(liste_id):
     """
