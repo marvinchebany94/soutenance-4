@@ -230,7 +230,7 @@ def creation_liste_joueur(tournois):
         i += 1
         cmd = input('Entrez q pour quitter ou c pour continuer : ')
         if cmd == "q":
-            sys.exit()
+            break
         if cmd == "c":
             pass
         else:
@@ -262,7 +262,7 @@ def creation_liste_joueur(tournois):
                         break
                     else:
                         continue
-                except:
+                except ValueError:
                     print("Tu as mal rempli le champ.")
                     continue
         while True:
@@ -310,7 +310,7 @@ def creation_liste_joueur(tournois):
             print("Le joueur {} {} a bien été enregistré dans la base de \
 données."
                   .format(joueur.nom, joueur.prenom))
-        except:
+        except ValueError:
             print("Le joueur n'a pas été enregistré dans la base de données.")
 
 
@@ -332,7 +332,7 @@ def add_players_to_tournament(tournois):
     try:
         tournois_table.update({'liste des joueurs': liste_des_joueurs},
                               q.nom == tournois)
-    except:
+    except IndexError:
         print("Les joueurs n'ont pas été enregistré dans la base de\
 données du tournois")
 
@@ -579,7 +579,7 @@ def classement_unique(classement):
     while True:
         try:
             player = players.search(q.classement == classement)[0]
-        except:
+        except IndexError:
             break
         nouveau_classement = player['classement'] + 1
         classement_unique(nouveau_classement)
@@ -653,7 +653,7 @@ Le classement a été mis à jour :
     Nouveau classement : {}
 """.format(player['nom'], player['prenom'], player['classement']))
 
-    except:
+    except IndexError:
         print("La personne n'existe pas dans la base de données.")
 
 

@@ -46,7 +46,7 @@ def main():
     """)
     liste_commandes_generales = ["1", "2", "3", "4", "5", "q"]
     liste_commandes_pour_les_tournois = ["1", "2", "3", "4", "5", "6", "7",
-                                         "8","q"]
+                                         "8", "q"]
 
     while True:
 
@@ -150,13 +150,10 @@ automatiquement(1)")
                             if cmd == "q":
                                 break
                 if commande == "2":
-                    """
-                        PROBLEME A REGLER AU NIVEAU DE LA CREATION DES TOURS
-                    """
                     numero_tour = nombre_de_tours(tournois)
                     if len(liste_id_for_each_players(tournois)) != 8:
                         print("Vous ne pouvez pas créer un tour, \
-                        le tournois n'est pas encore plein.")
+le tournois n'est pas encore plein.")
                         break
                     if numero_tour == 5:
                         print("""
@@ -233,5 +230,6 @@ JOUEURS AVEC LEURS POINTS :
                         print("Il faut créer une liste de joueurs.")
                     else:
                         voir_les_points_des_joueurs(liste_id)
+
 
 main()
