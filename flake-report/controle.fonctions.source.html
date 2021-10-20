@@ -827,16 +827,7 @@
                class="code sev- "><tt><i>264</i>                         <span class="k">continue</span></tt>
             </div>
             <div id="l265"
-               class="code sev-2  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-2">
-                        E722
-                     </span>
-                     Do not use bare 'except'</li>
-               
-               </ul><tt><i>265</i>                 <span class="k">except</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>265</i>                 <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span></tt>
             </div>
             <div id="l266"
                class="code sev- "><tt><i>266</i>                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tu as mal rempli le champ.&quot;</span><span class="p">)</span></tt>
@@ -980,16 +971,7 @@
                class="code sev- "><tt><i>312</i>                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">joueur</span><span class="o">.</span><span class="n">nom</span><span class="p">,</span> <span class="n">joueur</span><span class="o">.</span><span class="n">prenom</span><span class="p">))</span></tt>
             </div>
             <div id="l313"
-               class="code sev-2  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-2">
-                        E722
-                     </span>
-                     Do not use bare 'except'</li>
-               
-               </ul><tt><i>313</i>         <span class="k">except</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>313</i>         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span></tt>
             </div>
             <div id="l314"
                class="code sev- "><tt><i>314</i>             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Le joueur n&#39;a pas été enregistré dans la base de données.&quot;</span><span class="p">)</span></tt>
@@ -1055,16 +1037,7 @@
                class="code sev- "><tt><i>334</i>                               <span class="n">q</span><span class="o">.</span><span class="n">nom</span> <span class="o">==</span> <span class="n">tournois</span><span class="p">)</span></tt>
             </div>
             <div id="l335"
-               class="code sev-2  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-2">
-                        E722
-                     </span>
-                     Do not use bare 'except'</li>
-               
-               </ul><tt><i>335</i>     <span class="k">except</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>335</i>     <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span></tt>
             </div>
             <div id="l336"
                class="code sev- "><tt><i>336</i>         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Les joueurs n&#39;ont pas été enregistré dans la base de</span><span class="se">\</span></tt>
@@ -1805,16 +1778,7 @@
                class="code sev- "><tt><i>581</i>             <span class="n">player</span> <span class="o">=</span> <span class="n">players</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">classement</span> <span class="o">==</span> <span class="n">classement</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></tt>
             </div>
             <div id="l582"
-               class="code sev-2  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-2">
-                        E722
-                     </span>
-                     Do not use bare 'except'</li>
-               
-               </ul><tt><i>582</i>         <span class="k">except</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>582</i>         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span></tt>
             </div>
             <div id="l583"
                class="code sev- "><tt><i>583</i>             <span class="k">break</span></tt>
@@ -2036,16 +2000,7 @@
                class="code sev- "><tt><i>655</i> &nbsp;</tt>
             </div>
             <div id="l656"
-               class="code sev-2  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-2">
-                        E722
-                     </span>
-                     Do not use bare 'except'</li>
-               
-               </ul><tt><i>656</i>     <span class="k">except</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>656</i>     <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span></tt>
             </div>
             <div id="l657"
                class="code sev- "><tt><i>657</i>         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;La personne n&#39;existe pas dans la base de données.&quot;</span><span class="p">)</span></tt>
@@ -2864,19 +2819,10 @@
                class="code sev- "><tt><i>928</i>     <span class="n">joueur_a_ajouter</span> <span class="o">=</span> <span class="n">players_table</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">joueur_a_ajouter</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></tt>
             </div>
             <div id="l929"
-               class="code sev- "><tt><i>929</i>     <span class="n">joueur_a_ajouter</span> <span class="o">=</span> <span class="n">joueur_a_ajouter</span><span class="p">[</span><span class="s1">&#39;prenom&#39;</span><span class="p">]</span> <span class="o">+</span> \</tt>
+               class="code sev- "><tt><i>929</i>     <span class="n">joueur_a_ajouter</span> <span class="o">=</span> <span class="n">joueur_a_ajouter</span><span class="p">[</span><span class="s1">&#39;prenom&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span>\</tt>
             </div>
             <div id="l930"
-               class="code sev-2  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-2">
-                        E127
-                     </span>
-                     Continuation line over-indented for visual indent</li>
-               
-               </ul><tt><i>930</i>                        <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">joueur_a_ajouter</span><span class="p">[</span><span class="s1">&#39;nom&#39;</span><span class="p">]</span></tt>
+               class="code sev- "><tt><i>930</i>                                                     <span class="n">joueur_a_ajouter</span><span class="p">[</span><span class="s1">&#39;nom&#39;</span><span class="p">]</span></tt>
             </div>
             <div id="l931"
                class="code sev- "><tt><i>931</i> &nbsp;</tt>
@@ -3263,6 +3209,51 @@
                class="code sev- "><tt><i>1058</i> &nbsp;</tt>
             </div>
             <div id="l1059"
+               class="code sev- "><tt><i>1059</i>     <span class="k">return</span> <span class="n">paire_1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">paire_2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">paire_3</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">paire_4</span></tt>
+            </div>
+            <div id="l1060"
+               class="code sev- "><tt><i>1060</i> &nbsp;</tt>
+            </div>
+            <div id="l1061"
+               class="code sev- "><tt><i>1061</i> &nbsp;</tt>
+            </div>
+            <div id="l1062"
+               class="code sev- "><tt><i>1062</i> <span class="k">def</span> <span class="nf">voir_les_points_des_joueurs</span><span class="p">(</span><span class="n">liste_id</span><span class="p">):</span></tt>
+            </div>
+            <div id="l1063"
+               class="code sev- "><tt><i>1063</i>     <span class="sd">&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l1064"
+               class="code sev- "><tt><i>1064</i> <span class="sd">    La fonction va écrire le nom et prénom de la personne</span></tt>
+            </div>
+            <div id="l1065"
+               class="code sev- "><tt><i>1065</i> <span class="sd">    suivi par son nombre de points.</span></tt>
+            </div>
+            <div id="l1066"
+               class="code sev- "><tt><i>1066</i> <span class="sd">    &quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l1067"
+               class="code sev- "><tt><i>1067</i>     <span class="n">db</span> <span class="o">=</span> <span class="n">TinyDB</span><span class="p">(</span><span class="s1">&#39;db.json&#39;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l1068"
+               class="code sev- "><tt><i>1068</i>     <span class="n">joueurs</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s1">&#39;Joueurs&#39;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l1069"
+               class="code sev- "><tt><i>1069</i>     <span class="n">q</span> <span class="o">=</span> <span class="n">Query</span><span class="p">()</span></tt>
+            </div>
+            <div id="l1070"
+               class="code sev- "><tt><i>1070</i>     <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">liste_id</span><span class="p">:</span></tt>
+            </div>
+            <div id="l1071"
+               class="code sev- "><tt><i>1071</i>         <span class="n">joueur</span> <span class="o">=</span> <span class="n">joueurs</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="nb">id</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></tt>
+            </div>
+            <div id="l1072"
+               class="code sev- "><tt><i>1072</i>         <span class="n">nom_prenom</span> <span class="o">=</span> <span class="n">joueur</span><span class="p">[</span><span class="s1">&#39;nom&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">joueur</span><span class="p">[</span><span class="s1">&#39;prenom&#39;</span><span class="p">]</span></tt>
+            </div>
+            <div id="l1073"
+               class="code sev- "><tt><i>1073</i>         <span class="n">points</span> <span class="o">=</span> <span class="n">joueur</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">]</span></tt>
+            </div>
+            <div id="l1074"
                class="code sev-2  le">
                <ul class="violations">
                
@@ -3272,7 +3263,7 @@
                      </span>
                      No newline at end of file</li>
                
-               </ul><tt><i>1059</i>     <span class="k">return</span> <span class="n">paire_1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">paire_2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">paire_3</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">paire_4</span></tt>
+               </ul><tt><i>1074</i>         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nom_prenom</span><span class="p">,</span> <span class="n">points</span><span class="p">))</span></tt>
             </div>
             
          </div>
