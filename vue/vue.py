@@ -171,7 +171,7 @@ CHAQUE JOUEURS.
                                 continue
                             else:
                                 print("Commande invalide")
-                        break
+                        continue
 
                     if numero_tour == 1:
                         print("""
